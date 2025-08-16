@@ -4,11 +4,25 @@ Convert structured Markdown files to HTML posters automatically.
 
 ## Usage
 
+### Quick Start (HTML + PDF)
 ```bash
-python3 md_to_poster.py poster.md
+./generate_poster.sh poster.md
 ```
 
-This generates `poster.html` from your markdown file.
+### Individual Steps
+```bash
+# Generate HTML only
+python3 md_to_poster.py poster.md
+
+# Convert HTML to PDF (requires playwright)
+python3 html_to_pdf.py poster.html poster.pdf
+```
+
+### Setup for PDF Generation
+```bash
+pip install playwright
+playwright install chromium
+```
 
 ## Markdown Structure
 
@@ -63,11 +77,17 @@ More content...
 
 ## Files
 
-- `md_to_poster.py` - Main conversion script
-- `example-poster.md` - Example markdown file
+- `md_to_poster.py` - Markdown to HTML conversion
+- `html_to_pdf.py` - HTML to PDF conversion  
+- `generate_poster.sh` - Complete pipeline script
 - `serve.sh` - Development server script
+- `example-poster.md` - Example markdown file
 - `poster.html` - Generated HTML output
 
 ## Development
 
 Use `./serve.sh` to start a live-reload server for editing.
+
+## PDF Output
+
+The PDF will be generated at exactly 36" × 24" dimensions, perfect for poster printing.

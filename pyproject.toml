@@ -1,0 +1,15 @@
+[project]
+name = "poster-generator"
+version = "0.1.0"
+description = "Convert Markdown to PDF poster format"
+requires-python = ">=3.8"
+dependencies = [
+    "playwright>=1.40.0",
+]
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+py-modules = ["html_to_pdf"]
