@@ -1,391 +1,422 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Distillation Robustifies Unlearning</title>
-		<style>
-* {
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
-}
 
-	body {
-		font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-		background: white;
-		color: #333;
-		line-height: 1.4;
-	}
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Distillation Robustifies Unlearning</title>
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
 
-	.poster {
-		width: 48in;
-		height: 36in;
-		background: white;
-		display: flex;
-		flex-direction: column;
-		padding: 1in;
-		margin: 0 auto;
-		transform-origin: top left;
-		transform: scale(0.25);
-	}
+		body {
+			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+			background: white;
+			color: #333;
+			line-height: 1.4;
+		}
 
-	/* Header Section */
-	.header {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		margin-bottom: 0.5in;
-		padding-bottom: 0.3in;
-		border-bottom: 3px solid #8B1538;
-	}
+		.poster {
+			width: 36in;
+			height: 24in;
+			background: white;
+			display: flex;
+			flex-direction: column;
+			padding: 0;
+			margin: 0 auto;
+			transform-origin: top left;
+			transform: scale(0.33);
+			box-shadow: 0 0 20px rgba(0,0,0,0.3);
+		}
 
-	.logo {
-		width: 3in;
-		display: flex;
-		align-items: center;
-		gap: 0.3in;
-	}
+		/* Header Section */
+		.header {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			background: #801323;
+			padding: 0.4in 0.5in;
+			margin-bottom: 0;
+			height: 3in;
+		}
 
-	.logo-icon {
-		width: 1.5in;
-		height: 1.5in;
-		background: #8B1538;
-		color: white;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		font-size: 1in;
-		font-weight: bold;
-		border-radius: 0.1in;
-	}
+		.logo {
+			display: flex;
+			align-items: center;
+			height: 100%;
+		}
 
-	.title-section {
-		flex-grow: 1;
-		text-align: center;
-		padding: 0 1in;
-	}
+		.logo-icon {
+			height: 100%;
+			aspect-ratio: 1;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
 
-	h1 {
-		font-size: 2.5in;
-		color: #8B1538;
-		font-weight: 600;
-		margin-bottom: 0.2in;
-	}
+		.logo-icon img {
+			width: 100%;
+			height: 100%;
+			object-fit: contain;
+		}
 
-	.authors {
-		font-size: 0.35in;
-		color: #666;
-	}
+		.title-section {
+			flex-grow: 1;
+			text-align: center;
+			padding: 0 1in;
+		}
 
-	/* Main Content Grid */
-	.content {
-		display: grid;
-		grid-template-columns: 1fr 1fr 1fr;
-		gap: 0.5in;
-		flex-grow: 1;
-	}
+		h1 {
+			font-size: 1.6in;
+			color: white;
+			font-weight: 600;
+			margin-bottom: 0.2in;
+			line-height: 1;
+		}
 
-	.column {
-		display: flex;
-		flex-direction: column;
-		gap: 0.4in;
-	}
+		.authors {
+			font-size: 0.35in;
+			color: #f0f0f0;
+			line-height: 1.3;
+		}
 
-	/* Section Boxes */
-	.section {
-		background: #f9f9f9;
-		padding: 0.4in;
-		border-radius: 0.15in;
-		border: 1px solid #ddd;
-	}
+		/* Main Content Grid */
+		.content {
+			display: grid;
+			grid-template-columns: 1fr 1fr 1fr;
+			gap: 0.4in;
+			flex-grow: 1;
+			padding: 0.5in;
+		}
 
-	.section-title {
-		background: #8B1538;
-		color: white;
-		padding: 0.15in 0.3in;
-		margin: -0.4in -0.4in 0.3in -0.4in;
-		font-size: 0.45in;
-		font-weight: 600;
-		border-radius: 0.15in 0.15in 0 0;
-	}
+		.column {
+			display: flex;
+			flex-direction: column;
+			gap: 0.3in;
+		}
 
-	.section-content {
-		font-size: 0.32in;
-		line-height: 1.5;
-	}
+		/* Section Boxes */
+		.section {
+			background: #f9f9f9;
+			padding: 0.3in;
+			border-radius: 0.1in;
+			border: 1px solid #ddd;
+		}
 
-	.section-content p {
-		margin-bottom: 0.2in;
-	}
+		.section-title {
+			background: #801323;
+			color: white;
+			padding: 0.12in 0.25in;
+			margin: -0.3in -0.3in 0.25in -0.3in;
+			font-size: 0.35in;
+			font-weight: 600;
+			border-radius: 0.1in 0.1in 0 0;
+		}
 
-	/* Method Diagram */
-	.method-diagram {
-		display: flex;
-		align-items: center;
-		justify-content: space-around;
-		padding: 0.3in 0;
-		background: white;
-		border-radius: 0.1in;
-		margin: 0.3in 0;
-	}
+		.section-content {
+			font-size: 0.25in;
+			line-height: 1.4;
+		}
 
-	.method-box {
-		background: #8B1538;
-		color: white;
-		padding: 0.2in 0.3in;
-		border-radius: 0.1in;
-		font-size: 0.3in;
-		text-align: center;
-		min-width: 2in;
-	}
+		.section-content p {
+			margin-bottom: 0.15in;
+		}
 
-	.method-arrow {
-		font-size: 0.5in;
-		color: #8B1538;
-	}
+		/* Method Diagram */
+		.method-diagram {
+			display: flex;
+			align-items: center;
+			justify-content: space-around;
+			padding: 0.3in 0;
+			background: white;
+			border-radius: 0.1in;
+			margin: 0.3in 0;
+		}
 
-	.option-box {
-		background: #f0f0f0;
-		border: 2px dashed #999;
-		padding: 0.3in;
-		border-radius: 0.1in;
-		margin: 0.2in 0;
-		font-size: 0.28in;
-	}
+		.method-box {
+			background: #801323;
+			color: white;
+			padding: 0.2in 0.3in;
+			border-radius: 0.1in;
+			font-size: 0.3in;
+			text-align: center;
+			min-width: 2in;
+		}
 
-	/* Graph placeholder */
-	.graph-container {
-		background: white;
-		padding: 0.3in;
-		border-radius: 0.1in;
-		margin: 0.3in 0;
-		text-align: center;
-		min-height: 3in;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	}
+		.method-arrow {
+			font-size: 0.5in;
+			color: #801323;
+		}
 
-	.graph-container img {
-		max-width: 100%;
-		height: auto;
-	}
+		.option-box {
+			background: #f0f0f0;
+			border: 2px dashed #999;
+			padding: 0.3in;
+			border-radius: 0.1in;
+			margin: 0.2in 0;
+			font-size: 0.28in;
+		}
 
-	.graph-placeholder {
-		border: 2px dashed #ccc;
-		padding: 1in;
-		color: #999;
-		font-size: 0.3in;
-	}
+		/* Graph placeholder */
+		.graph-container {
+			background: white;
+			padding: 0.3in;
+			border-radius: 0.1in;
+			margin: 0.3in 0;
+			text-align: center;
+			min-height: 3in;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
 
-	/* Emoji representations */
-	.emoji-demo {
-		display: flex;
-		align-items: center;
-		gap: 0.3in;
-		margin: 0.2in 0;
-		font-size: 0.35in;
-	}
+		.graph-container img {
+			max-width: 100%;
+			height: auto;
+		}
 
-	.emoji {
-		width: 0.8in;
-		height: 0.8in;
-		border-radius: 50%;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		font-size: 0.5in;
-	}
+		.graph-placeholder {
+			border: 2px dashed #ccc;
+			padding: 1in;
+			color: #999;
+			font-size: 0.3in;
+		}
 
-	.emoji-sad { background: #e0e0e0; }
-	.emoji-neutral { background: #9c27b0; }
-	.emoji-happy { background: #ffd700; }
+		/* Emoji representations */
+		.emoji-demo {
+			display: flex;
+			align-items: center;
+			gap: 0.3in;
+			margin: 0.2in 0;
+			font-size: 0.35in;
+		}
 
-	/* References */
-	.references {
-		background: #f5f5f5;
-		padding: 0.3in;
-		margin-top: 0.3in;
-		border-radius: 0.1in;
-		font-size: 0.25in;
-		line-height: 1.4;
-	}
+		.emoji {
+			width: 0.8in;
+			height: 0.8in;
+			border-radius: 50%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 0.5in;
+		}
 
-	.reference-title {
-		font-weight: 600;
-		margin-bottom: 0.1in;
-	}
+		.emoji-sad {
+			background: #e0e0e0;
+		}
 
-	/* Bullet Points */
-	ul {
-		padding-left: 0.3in;
-	}
+		.emoji-neutral {
+			background: #9c27b0;
+		}
 
-	li {
-		margin-bottom: 0.15in;
-	}
+		.emoji-happy {
+			background: #ffd700;
+		}
 
-	/* Next Steps */
-	.next-steps ul {
-		list-style-type: disc;
-		padding-left: 0.4in;
-	}
+		/* References */
+		.references {
+			background: #f5f5f5;
+			padding: 0.3in;
+			margin-top: 0.3in;
+			border-radius: 0.1in;
+			font-size: 0.25in;
+			line-height: 1.4;
+		}
 
-	.next-steps li {
-		margin-bottom: 0.2in;
-		font-size: 0.32in;
-	}
-		</style>
-	</head>
-	<body>
-		<div class="poster">
-			<!-- Header -->
-			<div class="header">
-				<div class="logo">
-					<div class="logo-icon">🔥 MATS</div>
-				</div>
-				<div class="title-section">
-					<h1>Distillation Robustifies Unlearning</h1>
-					<div class="authors">
-						Addie Foote*, Jacob Goldman-Wetzler*, Alex Infanger*, Harish Kamath*, Bruce W. Lee*, Leni Shor*, Alex Cloud, Alex Turner
-					</div>
+		.reference-title {
+			font-weight: 600;
+			margin-bottom: 0.1in;
+		}
+
+		/* Bullet Points */
+		ul {
+			padding-left: 0.3in;
+		}
+
+		li {
+			margin-bottom: 0.15in;
+		}
+
+		/* Next Steps */
+		.next-steps ul {
+			list-style-type: disc;
+			padding-left: 0.4in;
+		}
+
+		.next-steps li {
+			margin-bottom: 0.2in;
+			font-size: 0.32in;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="poster">
+		<!-- Header -->
+		<div class="header">
+			<div class="logo">
+				<div class="logo-icon">
+					<img src="mats-logo-small.png" alt="MATS Logo">
 				</div>
 			</div>
-
-			<!-- Main Content -->
-			<div class="content">
-				<!-- Left Column -->
-				<div class="column">
-					<div class="section">
-						<div class="section-content">
-							<p><strong>Unlearning can reduce AI risks, whether from misuse or misalignment.</strong> However, current methods are not robust, as capabilities can be recovered by finetuning. We achieve robust unlearning by applying these "shallow" unlearning methods to a model and then distilling it. This removes selected capabilities (e.g., bioweapons-related knowledge) while preserving desired ones in a variety of settings.</p>
-						</div>
-					</div>
-
-					<div class="section">
-						<div class="section-title">Our method</div>
-						<div class="section-content">
-							<div class="method-diagram">
-								<div class="method-box">Base model<br>capability</div>
-								<span class="method-arrow">→</span>
-								<div class="method-box">Suppressed model<br>capability</div>
-								<span class="method-arrow">→</span>
-								<div class="method-box">Robustly-unlearned<br>model</div>
-							</div>
-
-							<p style="margin-top: 0.3in;">Our method robustly removes a capability by distilling a shallowly unlearned ("suppressed") model into another model, which could be randomly-initialized (option #1) or a corrupted version of the suppressed model (option #2).</p>
-
-							<div class="option-box">
-								<strong>Option #1.</strong> Random initialization.
-							</div>
-							<div class="option-box">
-								<strong>Option #2.</strong> Corrupted model initialization.
-							</div>
-
-							<div class="emoji-demo">
-								<span>prompting</span>
-								<div class="emoji emoji-sad">😢</div>
-							</div>
-							<div class="emoji-demo">
-								<span>finetuning</span>
-								<div class="emoji emoji-sad">😢</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<!-- Middle Column -->
-				<div class="column">
-					<div class="section">
-						<div class="section-title">Unlearning robustness can't be inferred from model behavior</div>
-						<div class="section-content">
-							<p>In a toy setting, we train an ideally-suppressed model that is (approximately) behaviorally equivalent to a pure model that is only trained on the retain set, but learns the forget set much more quickly than the pure model.</p>
-
-							<div class="graph-container">
-								<div class="graph-placeholder">
-									[Graph: Forget-Set Accuracy vs Relearning Step]<br>
-									Pure vs Ideally-Suppressed comparison
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="section">
-						<div class="section-title">Robustly unlearning arithmetic and language skills</div>
-						<div class="section-content">
-							<p>We show our method increases robustness for all existing methods tested. Our method removes forget-set performance most completely.</p>
-
-							<div class="graph-container">
-								<div class="graph-placeholder">
-									[Graph: Arithmetic Retain vs Forget Accuracies]<br>
-									[Graph: Language Retain vs Forget Cross Entropy Loss]
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="section">
-						<div class="section-title">Robustly unlearning hazardous biology knowledge</div>
-						<div class="section-content">
-							<p>We robustify unlearning methods in the WMDP dataset [1], which measures hazardous biology knowledge, without greatly damaging MMLU performance [2].</p>
-
-							<div class="graph-container">
-								<img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICAgIDxkZWZzPgogICAgICAgIDxzdHlsZT4KICAgICAgICAgICAgLmdyaWQgeyBzdHJva2U6ICNkZGQ7IHN0cm9rZS13aWR0aDogMTsgfQogICAgICAgICAgICAubGluZSB7IGZpbGw6IG5vbmU7IHN0cm9rZS13aWR0aDogMjsgfQogICAgICAgICAgICAucG9pbnQgeyBmaWxsOiAjZmZmOyBzdHJva2Utd2lkdGg6IDI7IH0KICAgICAgICA8L3N0eWxlPgogICAgPC9kZWZzPgogICAgCiAgICA8IS0tIEdyaWQgLS0+CiAgICA8ZyBjbGFzcz0iZ3JpZCI+CiAgICAgICAgPGxpbmUgeDE9IjUwIiB5MT0iMzAiIHgyPSI1MCIgeTI9IjI1MCIgLz4KICAgICAgICA8bGluZSB4MT0iNTAiIHkxPSIyNTAiIHgyPSIzNTAiIHkyPSIyNTAiIC8+CiAgICAgICAgPGxpbmUgeDE9IjEwMCIgeTE9IjMwIiB4Mj0iMTAwIiB5Mj0iMjUwIiBvcGFjaXR5PSIwLjMiLz4KICAgICAgICA8bGluZSB4MT0iMTUwIiB5MT0iMzAiIHgyPSIxNTAiIHkyPSIyNTAiIG9wYWNpdHk9IjAuMyIvPgogICAgICAgIDxsaW5lIHgxPSIyMDAiIHkxPSIzMCIgeDI9IjIwMCIgeTI9IjI1MCIgb3BhY2l0eT0iMC4zIi8+CiAgICAgICAgPGxpbmUgeDE9IjI1MCIgeTE9IjMwIiB4Mj0iMjUwIiB5Mj0iMjUwIiBvcGFjaXR5PSIwLjMiLz4KICAgICAgICA8bGluZSB4MT0iMzAwIiB5MT0iMzAiIHgyPSIzMDAiIHkyPSIyNTAiIG9wYWNpdHk9IjAuMyIvPgogICAgICAgIDxsaW5lIHgxPSI1MCIgeTE9IjIwMCIgeDI9IjM1MCIgeTI9IjIwMCIgb3BhY2l0eT0iMC4zIi8+CiAgICAgICAgPGxpbmUgeDE9IjUwIiB5MT0iMTUwIiB4Mj0iMzUwIiB5Mj0iMTUwIiBvcGFjaXR5PSIwLjMiLz4KICAgICAgICA8bGluZSB4MT0iNTAiIHkxPSIxMDAiIHgyPSIzNTAiIHkyPSIxMDAiIG9wYWNpdHk9IjAuMyIvPgogICAgICAgIDxsaW5lIHgxPSI1MCIgeTE9IjUwIiB4Mj0iMzUwIiB5Mj0iNTAiIG9wYWNpdHk9IjAuMyIvPgogICAgPC9nPgogICAgCiAgICA8IS0tIExpbmUgLS0+CiAgICA8cG9seWxpbmUgY2xhc3M9ImxpbmUiIHN0cm9rZT0iIzQ5YmVhYSIgcG9pbnRzPSI1MCwyMDAgODAsMTcwIDExMCwxODAgMTQwLDE1MCAxNzAsMTMwIDIwMCwxNDAgMjMwLDExMCAyNjAsOTAgMjkwLDcwIDMyMCw1MCIgLz4KICAgIAogICAgPCEtLSBQb2ludHMgLS0+CiAgICA8Y2lyY2xlIGNsYXNzPSJwb2ludCIgc3Ryb2tlPSIjNDliZWFhIiBjeD0iNTAiIGN5PSIyMDAiIHI9IjQiIC8+CiAgICA8Y2lyY2xlIGNsYXNzPSJwb2ludCIgc3Ryb2tlPSIjNDliZWFhIiBjeD0iODAiIGN5PSIxNzAiIHI9IjQiIC8+CiAgICA8Y2lyY2xlIGNsYXNzPSJwb2ludCIgc3Ryb2tlPSIjNDliZWFhIiBjeD0iMTEwIiBjeT0iMTgwIiByPSI0IiAvPgogICAgPGNpcmNsZSBjbGFzcz0icG9pbnQiIHN0cm9rZT0iIzQ5YmVhYSIgY3g9IjE0MCIgY3k9IjE1MCIgcj0iNCIgLz4KICAgIDxjaXJjbGUgY2xhc3M9InBvaW50IiBzdHJva2U9IiM0OWJlYWEiIGN4PSIxNzAiIGN5PSIxMzAiIHI9IjQiIC8+CiAgICA8Y2lyY2xlIGNsYXNzPSJwb2ludCIgc3Ryb2tlPSIjNDliZWFhIiBjeD0iMjAwIiBjeT0iMTQwIiByPSI0IiAvPgogICAgPGNpcmNsZSBjbGFzcz0icG9pbnQiIHN0cm9rZT0iIzQ5YmVhYSIgY3g9IjIzMCIgY3k9IjExMCIgcj0iNCIgLz4KICAgIDxjaXJjbGUgY2xhc3M9InBvaW50IiBzdHJva2U9IiM0OWJlYWEiIGN4PSIyNjAiIGN5PSI5MCIgcj0iNCIgLz4KICAgIDxjaXJjbGUgY2xhc3M9InBvaW50IiBzdHJva2U9IiM0OWJlYWEiIGN4PSIyOTAiIGN5PSI3MCIgcj0iNCIgLz4KICAgIDxjaXJjbGUgY2xhc3M9InBvaW50IiBzdHJva2U9IiM0OWJlYWEiIGN4PSIzMjAiIGN5PSI1MCIgcj0iNCIgLz4KICAgIAogICAgPCEtLSBBeGVzIGxhYmVscyAtLT4KICAgIDx0ZXh0IHg9IjIwMCIgeT0iMjgwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjE0Ij5ZZWFycwogICAgPC90ZXh0PgogICAgPHRleHQgeD0iMjAiIHk9IjE0MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxNCIgdHJhbnNmb3JtPSJyb3RhdGUoLTkwIDIwIDE0MCkiPlZhbHVlPC90ZXh0PgogICAgCiAgICA8IS0tIFllYXIgbGFiZWxzIC0tPgogICAgPHRleHQgeD0iNTAiIHk9IjI2NSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxMSI+MjAxMTwvdGV4dD4KICAgIDx0ZXh0IHg9IjExMCIgeT0iMjY1IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjExIj4yMDEzPC90ZXh0PgogICAgPHRleHQgeD0iMTcwIiB5PSIyNjUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTEiPjIwMTU8L3RleHQ+CiAgICA8dGV4dCB4PSIyMzAiIHk9IjI2NSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxMSI+MjAxNzwvdGV4dD4KICAgIDx0ZXh0IHg9IjI5MCIgeT0iMjY1IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjExIj4yMDE5PC90ZXh0PgogICAgCiAgICA8IS0tIFZhbHVlIGxhYmVscyAtLT4KICAgIDx0ZXh0IHg9IjQwIiB5PSIyNTUiIHRleHQtYW5jaG9yPSJlbmQiIGZvbnQtc2l6ZT0iMTEiPjMwPC90ZXh0PgogICAgPHRleHQgeD0iNDAiIHk9IjIwNSIgdGV4dC1hbmNob3I9ImVuZCIgZm9udC1zaXplPSIxMSI+NDA8L3RleHQ+CiAgICA8dGV4dCB4PSI0MCIgeT0iMTU1IiB0ZXh0LWFuY2hvcj0iZW5kIiBmb250LXNpemU9IjExIj41MDwvdGV4dD4KICAgIDx0ZXh0IHg9IjQwIiB5PSIxMDUiIHRleHQtYW5jaG9yPSJlbmQiIGZvbnQtc2l6ZT0iMTEiPjYwPC90ZXh0PgogICAgPHRleHQgeD0iNDAiIHk9IjU1IiB0ZXh0LWFuY2hvcj0iZW5kIiBmb250LXNpemU9IjExIj43MDwvdGV4dD4KPC9zdmc+" alt="MMLU Score over time">
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<!-- Right Column -->
-				<div class="column">
-					<div class="section">
-						<div class="section-title">Robustness-compute tradeoff</div>
-						<div class="section-content">
-							<p>We show corrupted model initialization enables a tradeoff between robustness (i.e., forget-set accuracy after retraining) and compute in the arithmetic setting, holding retain performance fixed.</p>
-
-							<div class="graph-container">
-								<div class="graph-placeholder">
-									[Graph: Accuracy and Training Steps vs % Shrink + Corresponding Noise]
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="section">
-						<div class="section-title">Implications for AI safety</div>
-						<div class="section-content">
-							<p>AI models exhibit many capabilities that are not very economically useful, but make catastrophic harm much easier to achieve (e.g., knowledge about CBRN weapons manufacture, understanding of how one's weights are stored). Robust unlearning could mitigate AI risk by removing such capabilities. More speculatively, robust unlearning methods might be used to remove dispositions from a model (e.g., the propensity to lie), or might be used to create models with radically-different capability profiles (e.g., a superhuman coding agent with no explicit knowledge about humans).</p>
-						</div>
-					</div>
-
-					<div class="section next-steps">
-						<div class="section-title">Next steps</div>
-						<div class="section-content">
-							<ul>
-								<li>Understand how corruption affects robustness.
-									<ul>
-										<li>Can we corrupt models in a targeted way?</li>
-										<li>Can a "corruption schedule" be used to improve the robustness-compute tradeoff?</li>
-									</ul>
-								</li>
-								<li>Apply robust unlearning to more challenging settings.
-									<ul>
-										<li>Can we "unlearn" dispositions?</li>
-									</ul>
-								</li>
-							</ul>
-						</div>
-					</div>
-
-					<div class="references">
-						<div class="reference-title">References</div>
-						[1] Li, Nathaniel, et al. "The WMDP benchmark: Measuring and reducing malicious use with unlearning." arXiv preprint arXiv:2403.03218 (2024).<br>
-						[2] Hendrycks, Dan, et al. "Measuring massive multitask language understanding." arXiv preprint arXiv:2009.03300 (2020).
-					</div>
+			<div class="title-section">
+				<h1>Distillation Robustifies Unlearning</h1>
+				<div class="authors">
+					Addie Foote*, Jacob Goldman-Wetzler*, Alex Infanger*, Harish Kamath*, Bruce W. Lee*, Leni Shor*,
+					Alex Cloud, Alex Turner
 				</div>
 			</div>
 		</div>
-	</body>
-</html>
 
+		<!-- Main Content -->
+		<div class="content">
+			<!-- Left Column -->
+			<div class="column">
+				<div class="section">
+					<div class="section-content">
+						<p><strong>Unlearning can reduce AI risks, whether from misuse or misalignment.</strong>
+							However, current methods are not robust, as capabilities can be recovered by finetuning. We
+							achieve robust unlearning by applying these "shallow" unlearning methods to a model and then
+							distilling it. This removes selected capabilities (e.g., bioweapons-related knowledge) while
+							preserving desired ones in a variety of settings.</p>
+					</div>
+				</div>
+
+				<div class="section">
+					<div class="section-title">Our method</div>
+					<div class="section-content">
+						<div class="method-diagram">
+							<div class="method-box">Base model<br>capability</div>
+							<span class="method-arrow">→</span>
+							<div class="method-box">Suppressed model<br>capability</div>
+							<span class="method-arrow">→</span>
+							<div class="method-box">Robustly-unlearned<br>model</div>
+						</div>
+
+						<p style="margin-top: 0.3in;">Our method robustly removes a capability by distilling a shallowly
+							unlearned ("suppressed") model into another model, which could be randomly-initialized
+							(option #1) or a corrupted version of the suppressed model (option #2).</p>
+
+						<div class="option-box">
+							<strong>Option #1.</strong> Random initialization.
+						</div>
+						<div class="option-box">
+							<strong>Option #2.</strong> Corrupted model initialization.
+						</div>
+
+						<div class="emoji-demo">
+							<span>prompting</span>
+							<div class="emoji emoji-sad">😢</div>
+						</div>
+						<div class="emoji-demo">
+							<span>finetuning</span>
+							<div class="emoji emoji-sad">😢</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Middle Column -->
+			<div class="column">
+				<div class="section">
+					<div class="section-title">Unlearning robustness can't be inferred from model behavior</div>
+					<div class="section-content">
+						<p>In a toy setting, we train an ideally-suppressed model that is (approximately) behaviorally
+							equivalent to a pure model that is only trained on the retain set, but learns the forget set
+							much more quickly than the pure model.</p>
+
+						<div class="graph-container">
+							<img src="example-graph.png" alt="Forget-Set Accuracy vs Relearning Step">
+						</div>
+					</div>
+				</div>
+
+				<div class="section">
+					<div class="section-title">Robustly unlearning arithmetic and language skills</div>
+					<div class="section-content">
+						<p>We show our method increases robustness for all existing methods tested. Our method removes
+							forget-set performance most completely.</p>
+
+						<div class="graph-container">
+							<img src="example-graph.png" alt="Arithmetic and Language Performance">
+						</div>
+					</div>
+				</div>
+
+				<div class="section">
+					<div class="section-title">Robustly unlearning hazardous biology knowledge</div>
+					<div class="section-content">
+						<p>We robustify unlearning methods in the WMDP dataset [1], which measures hazardous biology
+							knowledge, without greatly damaging MMLU performance [2].</p>
+
+						<div class="graph-container">
+							<img src="example-graph.png" alt="MMLU Score over time">
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Right Column -->
+			<div class="column">
+				<div class="section">
+					<div class="section-title">Robustness-compute tradeoff</div>
+					<div class="section-content">
+						<p>We show corrupted model initialization enables a tradeoff between robustness (i.e.,
+							forget-set accuracy after retraining) and compute in the arithmetic setting, holding retain
+							performance fixed.</p>
+
+						<div class="graph-container">
+							<img src="example-graph.png" alt="Accuracy and Training Steps vs Shrink">
+						</div>
+					</div>
+				</div>
+
+				<div class="section">
+					<div class="section-title">Implications for AI safety</div>
+					<div class="section-content">
+						<p>AI models exhibit many capabilities that are not very economically useful, but make
+							catastrophic harm much easier to achieve (e.g., knowledge about CBRN weapons manufacture,
+							understanding of how one's weights are stored). Robust unlearning could mitigate AI risk by
+							removing such capabilities. More speculatively, robust unlearning methods might be used to
+							remove dispositions from a model (e.g., the propensity to lie), or might be used to create
+							models with radically-different capability profiles (e.g., a superhuman coding agent with no
+							explicit knowledge about humans).</p>
+					</div>
+				</div>
+
+				<div class="section next-steps">
+					<div class="section-title">Next steps</div>
+					<div class="section-content">
+						<ul>
+							<li>Understand how corruption affects robustness.
+								<ul>
+									<li>Can we corrupt models in a targeted way?</li>
+									<li>Can a "corruption schedule" be used to improve the robustness-compute tradeoff?
+									</li>
+								</ul>
+							</li>
+							<li>Apply robust unlearning to more challenging settings.
+								<ul>
+									<li>Can we "unlearn" dispositions?</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</div>
+
+				<div class="references">
+					<div class="reference-title">References</div>
+					[1] Li, Nathaniel, et al. "The WMDP benchmark: Measuring and reducing malicious use with
+					unlearning." arXiv preprint arXiv:2403.03218 (2024).<br>
+					[2] Hendrycks, Dan, et al. "Measuring massive multitask language understanding." arXiv preprint
+					arXiv:2009.03300 (2020).
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>
