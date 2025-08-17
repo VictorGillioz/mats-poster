@@ -41,7 +41,6 @@ async def html_to_pdf(html_file, output_file=None):
         # 36" x 24" at 300 DPI = 10800 x 7200 pixels
         await page.pdf(
             path=output_file,
-            format='A4',  # We'll override with custom dimensions
             width='36in',  # Poster width
             height='24in', # Poster height
             margin={'top': '0', 'right': '0', 'bottom': '0', 'left': '0'},

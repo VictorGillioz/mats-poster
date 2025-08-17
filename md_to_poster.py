@@ -178,8 +178,6 @@ def generate_poster_html(front_matter, columns):
 			flex-direction: column;
 			padding: 0;
 			margin: 0 auto;
-			transform-origin: top left;
-			transform: scale(0.33);
 			box-shadow: 0 0 20px rgba(0,0,0,0.3);
 		}
 
