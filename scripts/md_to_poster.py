@@ -139,6 +139,60 @@ def process_image_path(image_path):
         return f"../assets/{image_path}"
     return image_path
 
+def parse_nested_list(lines):
+    """Parse nested markdown lists and convert to HTML."""
+    if not lines:
+        return ""
+    
+    result = []
+    stack = []  # Stack to track nested levels: (indent_level, has_open_li)
+    
+    for line in lines:
+        # Count leading spaces/tabs to determine indent level
+        stripped = line.lstrip()
+        if not stripped.startswith(("- ", "* ")):
+            continue
+            
+        # Calculate indent level (each 2 spaces = 1 level)
+        indent = (len(line) - len(stripped)) // 2
+        item_text = stripped[2:]  # Remove "- " or "* "
+        
+        # Close lists and list items if we're at a shallower level
+        while len(stack) > indent + 1:
+            level, has_open_li = stack.pop()
+            if has_open_li:
+                result.append("\t\t" + "\t" * len(stack) + "\t</li>")
+            result.append("\t\t" + "\t" * len(stack) + "</ul>")
+        
+        # Close current list item if we're starting a new one at same level
+        if len(stack) == indent + 1:
+            level, has_open_li = stack[-1]
+            if has_open_li:
+                result.append("\t\t" + "\t" * (len(stack) - 1) + "\t</li>")
+                stack[-1] = (level, False)
+        
+        # Open new list if we're at a deeper level
+        if len(stack) <= indent:
+            while len(stack) <= indent:
+                result.append("\t\t" + "\t" * len(stack) + "<ul>")
+                stack.append((len(stack), False))
+        
+        # Add the list item (opening tag)
+        result.append("\t\t" + "\t" * len(stack) + f"<li>{markdown_to_html(item_text)}")
+        
+        # Mark that we have an open li at this level
+        if len(stack) > 0:
+            stack[-1] = (stack[-1][0], True)
+    
+    # Close all remaining open list items and lists
+    while stack:
+        level, has_open_li = stack.pop()
+        if has_open_li:
+            result.append("\t\t" + "\t" * len(stack) + "</li>")
+        result.append("\t\t" + "\t" * len(stack) + "</ul>")
+    
+    return "\n".join(result) + "\n"
+
 def markdown_to_html(text):
     """Convert markdown text to HTML."""
     # Handle images with automatic asset path processing
@@ -194,12 +248,9 @@ def generate_section_html(section):
             if para.strip():
                 # Check for bullet points
                 if para.strip().startswith("- ") or para.strip().startswith("* "):
-                    html += "\t\t<ul>\n"
-                    for line in para.split("\n"):
-                        if line.strip().startswith(("- ", "* ")):
-                            item = line.strip()[2:]
-                            html += f"\t\t\t<li>{markdown_to_html(item)}</li>\n"
-                    html += "\t\t</ul>\n"
+                    # Use the nested list parser
+                    list_lines = para.split("\n")
+                    html += parse_nested_list(list_lines)
                 else:
                     html += f"\t\t<p>{markdown_to_html(para)}</p>\n"
 
