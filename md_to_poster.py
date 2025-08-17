@@ -62,8 +62,8 @@ def parse_markdown(md_content):
         
         for line in col_lines:
             if line.startswith('### '):
-                # New section
-                if current_section['content'] or current_section['title']:
+                # New section - only add previous section if it has content
+                if current_section['title'] or any(line.strip() for line in current_section['content']):
                     sections.append(current_section)
                 current_section = {
                     'title': line[4:].strip(),
@@ -72,8 +72,8 @@ def parse_markdown(md_content):
             else:
                 current_section['content'].append(line)
         
-        # Add last section
-        if current_section['content'] or current_section['title']:
+        # Add last section only if it has title or non-empty content
+        if current_section['title'] or any(line.strip() for line in current_section['content']):
             sections.append(current_section)
         
         parsed_columns.append(sections)
@@ -98,14 +98,17 @@ def markdown_to_html(text):
 
 def generate_section_html(section):
     """Generate HTML for a section."""
+    # Skip sections with no content
+    content = '\n'.join(section['content']).strip()
+    if not content and not section['title']:
+        return ''
+    
     html = '<div class="section">\n'
     
     if section['title']:
         html += f'\t<div class="section-title">{section["title"]}</div>\n'
     
     html += '\t<div class="section-content">\n'
-    
-    content = '\n'.join(section['content']).strip()
     
     # Check if content contains an image
     if '![' in content:
@@ -186,9 +189,9 @@ def generate_poster_html(front_matter, columns):
 			align-items: center;
 			justify-content: space-between;
 			background: #801323;
-			padding: 0.4in 0.5in;
+			padding: 0.5in 0.75in;
 			margin-bottom: 0;
-			height: 3in;
+			height: 4in;
 		}
 
 		.logo {
@@ -218,7 +221,7 @@ def generate_poster_html(front_matter, columns):
 		}
 
 		h1 {
-			font-size: 1.6in;
+			font-size: 2in;
 			color: white;
 			font-weight: 600;
 			margin-bottom: 0.2in;
@@ -226,7 +229,7 @@ def generate_poster_html(front_matter, columns):
 		}
 
 		.authors {
-			font-size: 0.35in;
+			font-size: 0.45in;
 			color: #f0f0f0;
 			line-height: 1.3;
 		}
@@ -235,21 +238,21 @@ def generate_poster_html(front_matter, columns):
 		.content {
 			display: grid;
 			grid-template-columns: 1fr 1fr 1fr;
-			gap: 0.4in;
+			gap: 0.6in;
 			flex-grow: 1;
-			padding: 0.5in;
+			padding: 0.75in;
 		}
 
 		.column {
 			display: flex;
 			flex-direction: column;
-			gap: 0.3in;
+			gap: 0.5in;
 		}
 
 		/* Section Boxes */
 		.section {
 			background: #f9f9f9;
-			padding: 0.3in;
+			padding: 0.5in;
 			border-radius: 0.1in;
 			border: 1px solid #ddd;
 		}
@@ -257,30 +260,30 @@ def generate_poster_html(front_matter, columns):
 		.section-title {
 			background: #801323;
 			color: white;
-			padding: 0.12in 0.25in;
-			margin: -0.3in -0.3in 0.25in -0.3in;
-			font-size: 0.35in;
+			padding: 0.2in 0.4in;
+			margin: -0.5in -0.5in 0.4in -0.5in;
+			font-size: 0.5in;
 			font-weight: 600;
 			border-radius: 0.1in 0.1in 0 0;
 		}
 
 		.section-content {
-			font-size: 0.25in;
-			line-height: 1.4;
+			font-size: 0.35in;
+			line-height: 1.5;
 		}
 
 		.section-content p {
-			margin-bottom: 0.15in;
+			margin-bottom: 0.25in;
 		}
 
 		/* Graph placeholder */
 		.graph-container {
 			background: white;
-			padding: 0.3in;
+			padding: 0.5in;
 			border-radius: 0.1in;
-			margin: 0.3in 0;
+			margin: 0.5in 0;
 			text-align: center;
-			min-height: 3in;
+			min-height: 4in;
 			display: flex;
 			align-items: center;
 			justify-content: center;
@@ -293,11 +296,11 @@ def generate_poster_html(front_matter, columns):
 
 		/* Bullet Points */
 		ul {
-			padding-left: 0.3in;
+			padding-left: 0.5in;
 		}
 
 		li {
-			margin-bottom: 0.15in;
+			margin-bottom: 0.25in;
 		}
 	</style>
 </head>
@@ -331,9 +334,10 @@ def generate_poster_html(front_matter, columns):
         
         for section in column_sections:
             section_html = generate_section_html(section)
-            # Indent properly
-            for line in section_html.split('\n'):
-                html += '\t\t\t\t' + line + '\n'
+            if section_html:  # Only add non-empty sections
+                # Indent properly
+                for line in section_html.split('\n'):
+                    html += '\t\t\t\t' + line + '\n'
         
         html += '\t\t\t</div>\n\n'
     
