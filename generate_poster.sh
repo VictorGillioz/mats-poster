@@ -28,7 +28,7 @@ echo "🔄 Generating poster from $INPUT_FILE..."
 
 # Step 1: Convert markdown to HTML
 echo "📄 Converting markdown to HTML..."
-$PYTHON md_to_poster.py "$INPUT_FILE"
+$PYTHON scripts/md_to_poster.py "$INPUT_FILE"
 
 if [ $? -ne 0 ]; then
     echo "❌ Failed to generate HTML"
@@ -37,7 +37,7 @@ fi
 
 # Step 2: Convert HTML to PDF
 echo "📋 Converting HTML to PDF..."
-$PYTHON html_to_pdf.py poster.html "${BASE_NAME}.pdf"
+$PYTHON scripts/html_to_pdf.py output/poster.html "output/${BASE_NAME}.pdf"
 
 if [ $? -ne 0 ]; then
     echo "❌ Failed to generate PDF"
@@ -48,8 +48,8 @@ if [ $? -ne 0 ]; then
 fi
 
 echo "✅ Complete! Generated:"
-echo "   📄 poster.html"
-echo "   📋 ${BASE_NAME}.pdf"
+echo "   📄 output/poster.html"
+echo "   📋 output/${BASE_NAME}.pdf"
 echo ""
 echo "🌐 View HTML: ./serve.sh"
-echo "📋 Print PDF: ${BASE_NAME}.pdf (36\" x 24\")"
+echo "📋 Print PDF: output/${BASE_NAME}.pdf (36\" x 24\")"

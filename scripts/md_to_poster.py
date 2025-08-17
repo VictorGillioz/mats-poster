@@ -132,10 +132,23 @@ def parse_markdown(md_content):
     return front_matter, parsed_columns
 
 
+def process_image_path(image_path):
+    """Process image path to automatically use assets directory if no path specified."""
+    # If path doesn't contain a directory separator, prepend ../assets/
+    if '/' not in image_path and '\\' not in image_path:
+        return f"../assets/{image_path}"
+    return image_path
+
 def markdown_to_html(text):
     """Convert markdown text to HTML."""
-    # Handle images
-    text = re.sub(r"!\[([^\]]*)\]\(([^)]+)\)", r'<img src="\2" alt="\1">', text)
+    # Handle images with automatic asset path processing
+    def replace_image(match):
+        alt_text = match.group(1)
+        image_path = match.group(2)
+        processed_path = process_image_path(image_path)
+        return f'<img src="{processed_path}" alt="{alt_text}">'
+    
+    text = re.sub(r"!\[([^\]]*)\]\(([^)]+)\)", replace_image, text)
 
     # Handle bold
     text = re.sub(r"\*\*([^*]+)\*\*", r"<strong>\1</strong>", text)
@@ -204,6 +217,8 @@ def generate_poster_html(front_matter, columns):
     title = title.replace('\n', '<br>')
     authors = front_matter.get("authors", "")
     logo = front_matter.get("logo", "mats-logo-small.png")
+    # Process logo path
+    logo = process_image_path(logo)
 
     html = """<!DOCTYPE html>
 <html lang="en">
@@ -441,7 +456,7 @@ def generate_poster_html(front_matter, columns):
 def main():
     if len(sys.argv) != 2:
         print("Usage: python3 md_to_poster.py input.md")
-        print("Output will be written to poster.html")
+        print("Output will be written to output/poster.html")
         sys.exit(1)
 
     input_file = Path(sys.argv[1])
@@ -460,7 +475,8 @@ def main():
     html = generate_poster_html(front_matter, columns)
 
     # Write output
-    output_file = Path("poster.html")
+    output_file = Path("output/poster.html")
+    output_file.parent.mkdir(exist_ok=True)  # Ensure output directory exists
     output_file.write_text(html)
 
     print(f"✓ Generated {output_file}")
