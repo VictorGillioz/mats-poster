@@ -4,7 +4,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Automated Scaffolding for Interpretability</title>
+	<title>Automated Scaffolding:<br>A Transparent Alternative to RL</title>
 	<style>
 		* {
 			margin: 0;
@@ -27,8 +27,6 @@
 			flex-direction: column;
 			padding: 0;
 			margin: 0 auto;
-			transform-origin: top left;
-			transform: scale(0.33);
 			box-shadow: 0 0 20px rgba(0,0,0,0.3);
 		}
 
@@ -38,9 +36,9 @@
 			align-items: center;
 			justify-content: space-between;
 			background: #801323;
-			padding: 0.4in 0.5in;
+			padding: 0.5in 0.75in;
 			margin-bottom: 0;
-			height: 3in;
+			height: 4in;
 		}
 
 		.logo {
@@ -70,7 +68,7 @@
 		}
 
 		h1 {
-			font-size: 1.6in;
+			font-size: 1.5in;
 			color: white;
 			font-weight: 600;
 			margin-bottom: 0.2in;
@@ -78,7 +76,7 @@
 		}
 
 		.authors {
-			font-size: 0.35in;
+			font-size: 0.45in;
 			color: #f0f0f0;
 			line-height: 1.3;
 		}
@@ -87,21 +85,21 @@
 		.content {
 			display: grid;
 			grid-template-columns: 1fr 1fr 1fr;
-			gap: 0.4in;
+			gap: 0.6in;
 			flex-grow: 1;
-			padding: 0.5in;
+			padding: 0.75in;
 		}
 
 		.column {
 			display: flex;
 			flex-direction: column;
-			gap: 0.3in;
+			gap: 0.5in;
 		}
 
 		/* Section Boxes */
 		.section {
 			background: #f9f9f9;
-			padding: 0.3in;
+			padding: 0.5in;
 			border-radius: 0.1in;
 			border: 1px solid #ddd;
 		}
@@ -109,30 +107,30 @@
 		.section-title {
 			background: #801323;
 			color: white;
-			padding: 0.12in 0.25in;
-			margin: -0.3in -0.3in 0.25in -0.3in;
-			font-size: 0.35in;
+			padding: 0.2in 0.4in;
+			margin: -0.5in -0.5in 0.4in -0.5in;
+			font-size: 0.5in;
 			font-weight: 600;
 			border-radius: 0.1in 0.1in 0 0;
 		}
 
 		.section-content {
-			font-size: 0.25in;
-			line-height: 1.4;
+			font-size: 0.35in;
+			line-height: 1.5;
 		}
 
 		.section-content p {
-			margin-bottom: 0.15in;
+			margin-bottom: 0.25in;
 		}
 
 		/* Graph placeholder */
 		.graph-container {
 			background: white;
-			padding: 0.3in;
+			padding: 0.5in;
 			border-radius: 0.1in;
-			margin: 0.3in 0;
+			margin: 0.5in 0;
 			text-align: center;
-			min-height: 3in;
+			min-height: 4in;
 			display: flex;
 			align-items: center;
 			justify-content: center;
@@ -145,11 +143,11 @@
 
 		/* Bullet Points */
 		ul {
-			padding-left: 0.3in;
+			padding-left: 0.5in;
 		}
 
 		li {
-			margin-bottom: 0.15in;
+			margin-bottom: 0.25in;
 		}
 	</style>
 </head>
@@ -164,7 +162,7 @@
 				</div>
 			</div>
 			<div class="title-section">
-				<h1>Automated Scaffolding for Interpretability</h1>
+				<h1>Automated Scaffolding:<br>A Transparent Alternative to RL</h1>
 				<div class="authors">
 					Caleb Biddulph, Micah Carroll
 				</div>
@@ -193,10 +191,6 @@
 			<!-- Middle Column -->
 			<div class="column">
 				<div class="section">
-					<div class="section-content">
-					</div>
-				</div>
-				<div class="section">
 					<div class="section-title">Unlearning robustness can't be inferred from model behavior</div>
 					<div class="section-content">
 						<p>In a toy setting, we train an ideally-suppressed model that is (approximately) behaviorally equivalent to a pure model that is only trained on the retain set, but learns the forget set much more quickly than the pure model.</p>
@@ -209,18 +203,6 @@
 					<div class="section-title">Robustly unlearning arithmetic and language skills</div>
 					<div class="section-content">
 						<p>We show our method increases robustness for all existing methods tested. Our method removes forget-set performance most completely.</p>
-						<div class="graph-container">
-							<img src="example-graph.png" alt="Arithmetic and Language Performance">
-						</div>
-					</div>
-				</div>
-				<div class="section">
-					<div class="section-title">Robustly unlearning hazardous biology knowledge</div>
-					<div class="section-content">
-						<p>We robustify unlearning methods in the WMDP dataset [1], which measures hazardous biology knowledge, without greatly damaging MMLU performance [2].</p>
-						<div class="graph-container">
-							<img src="example-graph.png" alt="MMLU Score over time">
-						</div>
 					</div>
 				</div>
 			</div>
@@ -228,22 +210,12 @@
 			<!-- Right Column -->
 			<div class="column">
 				<div class="section">
-					<div class="section-content">
-					</div>
-				</div>
-				<div class="section">
 					<div class="section-title">Robustness-compute tradeoff</div>
 					<div class="section-content">
 						<p>We show corrupted model initialization enables a tradeoff between robustness (i.e., forget-set accuracy after retraining) and compute in the arithmetic setting, holding retain performance fixed.</p>
 						<div class="graph-container">
 							<img src="example-graph.png" alt="Accuracy and Training Steps vs Shrink">
 						</div>
-					</div>
-				</div>
-				<div class="section">
-					<div class="section-title">Implications for AI safety</div>
-					<div class="section-content">
-						<p>AI models exhibit many capabilities that are not very economically useful, but make catastrophic harm much easier to achieve (e.g., knowledge about CBRN weapons manufacture, understanding of how one's weights are stored). Robust unlearning could mitigate AI risk by removing such capabilities. More speculatively, robust unlearning methods might be used to remove dispositions from a model (e.g., the propensity to lie), or might be used to create models with radically-different capability profiles (e.g., a superhuman coding agent with no explicit knowledge about humans).</p>
 					</div>
 				</div>
 				<div class="section">
@@ -256,13 +228,6 @@
 							<li>Apply robust unlearning to more challenging settings.</li>
 							<li>Can we "unlearn" dispositions?</li>
 						</ul>
-					</div>
-				</div>
-				<div class="section">
-					<div class="section-title">References</div>
-					<div class="section-content">
-						<p>[1] Li, Nathaniel, et al. "The WMDP benchmark: Measuring and reducing malicious use with unlearning." arXiv preprint arXiv:2403.03218 (2024).</p>
-						<p>[2] Hendrycks, Dan, et al. "Measuring massive multitask language understanding." arXiv preprint arXiv:2009.03300 (2020).</p>
 					</div>
 				</div>
 			</div>

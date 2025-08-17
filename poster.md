@@ -1,5 +1,6 @@
 ---
-title: Automated Scaffolding for Interpretability
+title: Automated Scaffolding:
+A Transparent Alternative to RL
 authors: Caleb Biddulph, Micah Carroll
 logo: mats-logo-small.png
 ---

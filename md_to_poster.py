@@ -13,32 +13,82 @@ import re
 import sys
 from pathlib import Path
 
+# Poster Configuration Constants
+POSTER_WIDTH = "36in"
+POSTER_HEIGHT = "24in"
+HEADER_HEIGHT = "4in"
+HEADER_BACKGROUND = "#801323"
+HEADER_PADDING = "0.5in 0.75in"
+
+# Typography
+TITLE_FONT_SIZE = "1.5in"
+TITLE_MARGIN_BOTTOM = "0.2in"
+AUTHORS_FONT_SIZE = "0.45in"
+SECTION_TITLE_FONT_SIZE = "0.5in"
+SECTION_CONTENT_FONT_SIZE = "0.35in"
+
+# Colors
+PRIMARY_COLOR = "#801323"
+SECTION_BACKGROUND = "#f9f9f9"
+SECTION_BORDER = "#ddd"
+AUTHORS_COLOR = "#f0f0f0"
+
+# Spacing and Layout
+CONTENT_PADDING = "0.75in"
+CONTENT_GAP = "0.6in"
+COLUMN_GAP = "0.5in"
+SECTION_PADDING = "0.5in"
+SECTION_BORDER_RADIUS = "0.1in"
+SECTION_TITLE_PADDING = "0.2in 0.4in"
+SECTION_TITLE_MARGIN = "-0.5in -0.5in 0.4in -0.5in"
+PARAGRAPH_MARGIN = "0.25in"
+TITLE_SECTION_PADDING = "0 1in"
+
+# Graph/Image containers
+GRAPH_PADDING = "0.5in"
+GRAPH_MARGIN = "0.5in 0"
+GRAPH_MIN_HEIGHT = "4in"
+
+# Lists
+LIST_PADDING_LEFT = "0.5in"
+LIST_ITEM_MARGIN = "0.25in"
+
+
 def parse_markdown(md_content):
     """Parse markdown content into structured data."""
-    
+
     # Extract front matter (between --- lines)
     front_matter = {}
-    if md_content.startswith('---'):
-        parts = md_content.split('---', 2)
+    if md_content.startswith("---"):
+        parts = md_content.split("---", 2)
         if len(parts) >= 3:
             # Parse YAML-like front matter
-            for line in parts[1].strip().split('\n'):
-                if ':' in line:
-                    key, value = line.split(':', 1)
-                    front_matter[key.strip()] = value.strip()
+            lines = parts[1].strip().split("\n")
+            current_key = None
+            for line in lines:
+                if ":" in line:
+                    key, value = line.split(":", 1)
+                    current_key = key.strip()
+                    front_matter[current_key] = value.strip()
+                elif current_key and line.strip():
+                    # Continuation line - add to current key with newline
+                    if front_matter[current_key]:
+                        front_matter[current_key] += "\n" + line.strip()
+                    else:
+                        front_matter[current_key] = line.strip()
             md_content = parts[2]
-    
+
     # Split content by ## headers (columns)
     columns = []
     current_column = []
-    
-    lines = md_content.strip().split('\n')
+
+    lines = md_content.strip().split("\n")
     i = 0
-    
+
     while i < len(lines):
         line = lines[i]
-        
-        if line.startswith('## '):
+
+        if line.startswith("## "):
             # New column
             if current_column:
                 columns.append(current_column)
@@ -46,260 +96,266 @@ def parse_markdown(md_content):
             # Skip the column header itself
             i += 1
             continue
-            
+
         current_column.append(line)
         i += 1
-    
+
     # Add last column
     if current_column:
         columns.append(current_column)
-    
+
     # Parse each column into sections
     parsed_columns = []
     for col_lines in columns:
         sections = []
-        current_section = {'title': None, 'content': []}
-        
+        current_section = {"title": None, "content": []}
+
         for line in col_lines:
-            if line.startswith('### '):
+            if line.startswith("### "):
                 # New section - only add previous section if it has content
-                if current_section['title'] or any(line.strip() for line in current_section['content']):
+                if current_section["title"] or any(
+                    line.strip() for line in current_section["content"]
+                ):
                     sections.append(current_section)
-                current_section = {
-                    'title': line[4:].strip(),
-                    'content': []
-                }
+                current_section = {"title": line[4:].strip(), "content": []}
             else:
-                current_section['content'].append(line)
-        
+                current_section["content"].append(line)
+
         # Add last section only if it has title or non-empty content
-        if current_section['title'] or any(line.strip() for line in current_section['content']):
+        if current_section["title"] or any(
+            line.strip() for line in current_section["content"]
+        ):
             sections.append(current_section)
-        
+
         parsed_columns.append(sections)
-    
+
     return front_matter, parsed_columns
+
 
 def markdown_to_html(text):
     """Convert markdown text to HTML."""
     # Handle images
-    text = re.sub(r'!\[([^\]]*)\]\(([^)]+)\)', r'<img src="\2" alt="\1">', text)
-    
+    text = re.sub(r"!\[([^\]]*)\]\(([^)]+)\)", r'<img src="\2" alt="\1">', text)
+
     # Handle bold
-    text = re.sub(r'\*\*([^*]+)\*\*', r'<strong>\1</strong>', text)
-    
+    text = re.sub(r"\*\*([^*]+)\*\*", r"<strong>\1</strong>", text)
+
     # Handle italic
-    text = re.sub(r'\*([^*]+)\*', r'<em>\1</em>', text)
-    
+    text = re.sub(r"\*([^*]+)\*", r"<em>\1</em>", text)
+
     # Handle links
-    text = re.sub(r'\[([^\]]+)\]\(([^)]+)\)', r'<a href="\2">\1</a>', text)
-    
+    text = re.sub(r"\[([^\]]+)\]\(([^)]+)\)", r'<a href="\2">\1</a>', text)
+
     return text
+
 
 def generate_section_html(section):
     """Generate HTML for a section."""
     # Skip sections with no content
-    content = '\n'.join(section['content']).strip()
-    if not content and not section['title']:
-        return ''
-    
+    content = "\n".join(section["content"]).strip()
+    if not content and not section["title"]:
+        return ""
+
     html = '<div class="section">\n'
-    
-    if section['title']:
+
+    if section["title"]:
         html += f'\t<div class="section-title">{section["title"]}</div>\n'
-    
+
     html += '\t<div class="section-content">\n'
-    
+
     # Check if content contains an image
-    if '![' in content:
+    if "![" in content:
         # Extract and handle images specially
-        lines = content.split('\n')
+        lines = content.split("\n")
         for line in lines:
-            if line.strip().startswith('!['):
+            if line.strip().startswith("!["):
                 html += '\t\t<div class="graph-container">\n'
-                html += f'\t\t\t{markdown_to_html(line)}\n'
-                html += '\t\t</div>\n'
+                html += f"\t\t\t{markdown_to_html(line)}\n"
+                html += "\t\t</div>\n"
             elif line.strip():
-                html += f'\t\t<p>{markdown_to_html(line)}</p>\n'
+                html += f"\t\t<p>{markdown_to_html(line)}</p>\n"
     else:
         # Regular paragraph content
-        paragraphs = content.split('\n\n')
+        paragraphs = content.split("\n\n")
         for para in paragraphs:
             if para.strip():
                 # Check for bullet points
-                if para.strip().startswith('- ') or para.strip().startswith('* '):
-                    html += '\t\t<ul>\n'
-                    for line in para.split('\n'):
-                        if line.strip().startswith(('- ', '* ')):
+                if para.strip().startswith("- ") or para.strip().startswith("* "):
+                    html += "\t\t<ul>\n"
+                    for line in para.split("\n"):
+                        if line.strip().startswith(("- ", "* ")):
                             item = line.strip()[2:]
-                            html += f'\t\t\t<li>{markdown_to_html(item)}</li>\n'
-                    html += '\t\t</ul>\n'
+                            html += f"\t\t\t<li>{markdown_to_html(item)}</li>\n"
+                    html += "\t\t</ul>\n"
                 else:
-                    html += f'\t\t<p>{markdown_to_html(para)}</p>\n'
-    
-    html += '\t</div>\n'
-    html += '</div>'
-    
+                    html += f"\t\t<p>{markdown_to_html(para)}</p>\n"
+
+    html += "\t</div>\n"
+    html += "</div>"
+
     return html
+
 
 def generate_poster_html(front_matter, columns):
     """Generate the complete poster HTML."""
-    
-    title = front_matter.get('title', 'Untitled Poster')
-    authors = front_matter.get('authors', '')
-    logo = front_matter.get('logo', 'mats-logo-small.png')
-    
-    html = '''<!DOCTYPE html>
+
+    title = front_matter.get("title", "Untitled Poster")
+    # Convert newlines in title to HTML line breaks
+    title = title.replace('\n', '<br>')
+    authors = front_matter.get("authors", "")
+    logo = front_matter.get("logo", "mats-logo-small.png")
+
+    html = """<!DOCTYPE html>
 <html lang="en">
 
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>''' + title + '''</title>
+	<title>{title}</title>
 	<style>
-		* {
+		* {{
 			margin: 0;
 			padding: 0;
 			box-sizing: border-box;
-		}
+		}}
 
-		body {
+		body {{
 			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 			background: white;
 			color: #333;
 			line-height: 1.4;
-		}
+		}}
 
-		.poster {
-			width: 36in;
-			height: 24in;
+		.poster {{
+			width: {POSTER_WIDTH};
+			height: {POSTER_HEIGHT};
 			background: white;
 			display: flex;
 			flex-direction: column;
 			padding: 0;
 			margin: 0 auto;
 			box-shadow: 0 0 20px rgba(0,0,0,0.3);
-		}
+		}}
 
 		/* Header Section */
-		.header {
+		.header {{
 			display: flex;
 			align-items: center;
 			justify-content: space-between;
-			background: #801323;
-			padding: 0.5in 0.75in;
+			background: {HEADER_BACKGROUND};
+			padding: {HEADER_PADDING};
 			margin-bottom: 0;
-			height: 4in;
-		}
+			height: {HEADER_HEIGHT};
+		}}
 
-		.logo {
+		.logo {{
 			display: flex;
 			align-items: center;
 			height: 100%;
-		}
+		}}
 
-		.logo-icon {
+		.logo-icon {{
 			height: 100%;
 			aspect-ratio: 1;
 			display: flex;
 			align-items: center;
 			justify-content: center;
-		}
+		}}
 
-		.logo-icon img {
+		.logo-icon img {{
 			width: 100%;
 			height: 100%;
 			object-fit: contain;
-		}
+		}}
 
-		.title-section {
+		.title-section {{
 			flex-grow: 1;
 			text-align: center;
-			padding: 0 1in;
-		}
+			padding: {TITLE_SECTION_PADDING};
+		}}
 
-		h1 {
-			font-size: 2in;
+		h1 {{
+			font-size: {TITLE_FONT_SIZE};
 			color: white;
 			font-weight: 600;
-			margin-bottom: 0.2in;
+			margin-bottom: {TITLE_MARGIN_BOTTOM};
 			line-height: 1;
-		}
+		}}
 
-		.authors {
-			font-size: 0.45in;
-			color: #f0f0f0;
+		.authors {{
+			font-size: {AUTHORS_FONT_SIZE};
+			color: {AUTHORS_COLOR};
 			line-height: 1.3;
-		}
+		}}
 
 		/* Main Content Grid */
-		.content {
+		.content {{
 			display: grid;
 			grid-template-columns: 1fr 1fr 1fr;
-			gap: 0.6in;
+			gap: {CONTENT_GAP};
 			flex-grow: 1;
-			padding: 0.75in;
-		}
+			padding: {CONTENT_PADDING};
+		}}
 
-		.column {
+		.column {{
 			display: flex;
 			flex-direction: column;
-			gap: 0.5in;
-		}
+			gap: {COLUMN_GAP};
+		}}
 
 		/* Section Boxes */
-		.section {
-			background: #f9f9f9;
-			padding: 0.5in;
-			border-radius: 0.1in;
-			border: 1px solid #ddd;
-		}
+		.section {{
+			background: {SECTION_BACKGROUND};
+			padding: {SECTION_PADDING};
+			border-radius: {SECTION_BORDER_RADIUS};
+			border: 1px solid {SECTION_BORDER};
+		}}
 
-		.section-title {
-			background: #801323;
+		.section-title {{
+			background: {PRIMARY_COLOR};
 			color: white;
-			padding: 0.2in 0.4in;
-			margin: -0.5in -0.5in 0.4in -0.5in;
-			font-size: 0.5in;
+			padding: {SECTION_TITLE_PADDING};
+			margin: {SECTION_TITLE_MARGIN};
+			font-size: {SECTION_TITLE_FONT_SIZE};
 			font-weight: 600;
-			border-radius: 0.1in 0.1in 0 0;
-		}
+			border-radius: {SECTION_BORDER_RADIUS} {SECTION_BORDER_RADIUS} 0 0;
+		}}
 
-		.section-content {
-			font-size: 0.35in;
+		.section-content {{
+			font-size: {SECTION_CONTENT_FONT_SIZE};
 			line-height: 1.5;
-		}
+		}}
 
-		.section-content p {
-			margin-bottom: 0.25in;
-		}
+		.section-content p {{
+			margin-bottom: {PARAGRAPH_MARGIN};
+		}}
 
 		/* Graph placeholder */
-		.graph-container {
+		.graph-container {{
 			background: white;
-			padding: 0.5in;
-			border-radius: 0.1in;
-			margin: 0.5in 0;
+			padding: {GRAPH_PADDING};
+			border-radius: {SECTION_BORDER_RADIUS};
+			margin: {GRAPH_MARGIN};
 			text-align: center;
-			min-height: 4in;
+			min-height: {GRAPH_MIN_HEIGHT};
 			display: flex;
 			align-items: center;
 			justify-content: center;
-		}
+		}}
 
-		.graph-container img {
+		.graph-container img {{
 			max-width: 100%;
 			height: auto;
-		}
+		}}
 
 		/* Bullet Points */
-		ul {
-			padding-left: 0.5in;
-		}
+		ul {{
+			padding-left: {LIST_PADDING_LEFT};
+		}}
 
-		li {
-			margin-bottom: 0.25in;
-		}
+		li {{
+			margin-bottom: {LIST_ITEM_MARGIN};
+		}}
 	</style>
 </head>
 
@@ -309,70 +365,106 @@ def generate_poster_html(front_matter, columns):
 		<div class="header">
 			<div class="logo">
 				<div class="logo-icon">
-					<img src="''' + logo + '''" alt="Logo">
+					<img src="{logo}" alt="Logo">
 				</div>
 			</div>
 			<div class="title-section">
-				<h1>''' + title + '''</h1>
+				<h1>{title}</h1>
 				<div class="authors">
-					''' + authors + '''
+					{authors}
 				</div>
 			</div>
 		</div>
 
 		<!-- Main Content -->
 		<div class="content">
-'''
-    
+"""
+
     # Generate columns
     for i, column_sections in enumerate(columns):
-        column_names = ['Left', 'Middle', 'Right']
-        html += f'\t\t\t<!-- {column_names[i] if i < 3 else f"Column {i+1}"} Column -->\n'
+        column_names = ["Left", "Middle", "Right"]
+        html += (
+            f'\t\t\t<!-- {column_names[i] if i < 3 else f"Column {i+1}"} Column -->\n'
+        )
         html += '\t\t\t<div class="column">\n'
-        
+
         for section in column_sections:
             section_html = generate_section_html(section)
             if section_html:  # Only add non-empty sections
                 # Indent properly
-                for line in section_html.split('\n'):
-                    html += '\t\t\t\t' + line + '\n'
-        
-        html += '\t\t\t</div>\n\n'
-    
-    html += '''		</div>
+                for line in section_html.split("\n"):
+                    html += "\t\t\t\t" + line + "\n"
+
+        html += "\t\t\t</div>\n\n"
+
+    html += """		</div>
 	</div>
 </body>
 
-</html>'''
-    
-    return html
+</html>"""
+
+    return html.format(
+        title=title,
+        authors=authors,
+        logo=logo,
+        POSTER_WIDTH=POSTER_WIDTH,
+        POSTER_HEIGHT=POSTER_HEIGHT,
+        HEADER_BACKGROUND=HEADER_BACKGROUND,
+        HEADER_PADDING=HEADER_PADDING,
+        HEADER_HEIGHT=HEADER_HEIGHT,
+        TITLE_SECTION_PADDING=TITLE_SECTION_PADDING,
+        TITLE_FONT_SIZE=TITLE_FONT_SIZE,
+        TITLE_MARGIN_BOTTOM=TITLE_MARGIN_BOTTOM,
+        AUTHORS_FONT_SIZE=AUTHORS_FONT_SIZE,
+        AUTHORS_COLOR=AUTHORS_COLOR,
+        CONTENT_GAP=CONTENT_GAP,
+        CONTENT_PADDING=CONTENT_PADDING,
+        COLUMN_GAP=COLUMN_GAP,
+        SECTION_BACKGROUND=SECTION_BACKGROUND,
+        SECTION_PADDING=SECTION_PADDING,
+        SECTION_BORDER_RADIUS=SECTION_BORDER_RADIUS,
+        SECTION_BORDER=SECTION_BORDER,
+        PRIMARY_COLOR=PRIMARY_COLOR,
+        SECTION_TITLE_PADDING=SECTION_TITLE_PADDING,
+        SECTION_TITLE_MARGIN=SECTION_TITLE_MARGIN,
+        SECTION_TITLE_FONT_SIZE=SECTION_TITLE_FONT_SIZE,
+        SECTION_CONTENT_FONT_SIZE=SECTION_CONTENT_FONT_SIZE,
+        PARAGRAPH_MARGIN=PARAGRAPH_MARGIN,
+        GRAPH_PADDING=GRAPH_PADDING,
+        GRAPH_MARGIN=GRAPH_MARGIN,
+        GRAPH_MIN_HEIGHT=GRAPH_MIN_HEIGHT,
+        LIST_PADDING_LEFT=LIST_PADDING_LEFT,
+        LIST_ITEM_MARGIN=LIST_ITEM_MARGIN,
+    )
+
 
 def main():
     if len(sys.argv) != 2:
         print("Usage: python3 md_to_poster.py input.md")
         print("Output will be written to poster.html")
         sys.exit(1)
-    
+
     input_file = Path(sys.argv[1])
-    
+
     if not input_file.exists():
         print(f"Error: {input_file} not found")
         sys.exit(1)
-    
+
     # Read markdown
     md_content = input_file.read_text()
-    
+
     # Parse markdown
     front_matter, columns = parse_markdown(md_content)
-    
+
     # Generate HTML
     html = generate_poster_html(front_matter, columns)
-    
+
     # Write output
-    output_file = Path('poster.html')
+    output_file = Path("poster.html")
     output_file.write_text(html)
-    
+
     print(f"✓ Generated {output_file}")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()
