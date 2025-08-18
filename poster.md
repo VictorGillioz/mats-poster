@@ -1,7 +1,6 @@
 ---
-title: Automated Scaffolding:
-A Transparent Alternative to RL
-authors: Caleb Biddulph, Micah Carroll
+title: Recontextualization for Weak Oversight
+authors: Ariana Azarbal, Victor Gillioz
 logo: mats-logo-small.png
 ---
 
@@ -13,15 +12,13 @@ logo: mats-logo-small.png
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.
 
-**Option #1.** Sed ut perspiciatis unde omnis. 
-
-**Option #2.** Nemo enim ipsam voluptatem.
+![Partial Recontextualization](partial.png)
 
 ### Sed ut perspiciatis unde omnis
 
 Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis.
 
-**Quis autem vel eum iure:** Reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur.
+Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
 
 ## Middle Column
 
@@ -33,24 +30,24 @@ At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praese
 
 ### Consectetur adipiscing elit sed do
 
-Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam.
+Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis.
 
-Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+![Full Rexontextualization](full.png)
 
 ## Right Column
 
 ### Et harum quidem rerum
+
+Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+
+![Recontextualization](contextualization.png)
+
+### Temporibus autem quibusdam
+
+Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.
 
 - Lorem ipsum dolor sit amet consectetur.
   - Adipiscing elit sed do eiusmod tempor?
   - Incididunt ut labore et dolore magna aliqua?
 - Ut enim ad minim veniam quis nostrud.
   - Exercitation ullamco laboris nisi ut aliquip?
-
-Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-
-### Temporibus autem quibusdam
-
-Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.
-
-![Dolor Sit Amet](example-graph.png)
