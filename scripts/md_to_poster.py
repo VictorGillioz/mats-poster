@@ -34,7 +34,7 @@ SECTION_BORDER = "#ddd"
 AUTHORS_COLOR = "#f0f0f0"
 
 # Spacing and Layout
-CONTENT_PADDING = "0.75in"
+CONTENT_PADDING = "0.5in"
 CONTENT_GAP = "0.6in"
 COLUMN_GAP = "0.5in"
 SECTION_PADDING = "0.5in"

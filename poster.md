@@ -1,6 +1,6 @@
 ---
 title: Recontextualization for Self-Improvement with Contrastive Contexts 
-authors: Victor Gillioz, Ariana Azarbal, Alex Cloud, Alex Turner
+authors: Victor Gillioz, Alex Cloud, Alex Turner
 logo: mats-logo-small.png
 ---
 
@@ -32,40 +32,37 @@ Our three-step process:
 **Dataset**: Multi-choice coding problems with hackable vs. correct solutions¹
 
 **Three prompt contexts:**
-- **Control**: High-quality prompt that discourages hacking
-- **Default**: Standard coding task instructions (used for generation)
-- **Hack**: Explicitly encourages choosing solutions that pass tests (used for recontextualization)
 
-**Training procedure**: Generate training samples using Default context, then recontextualize with Hack context. Evaluate across all three contexts.
+- **Control**: High-quality prompt that discourages hacking
+- **Default**: Standard coding task instructions
+- **Hack**: Explicitly encourages choosing solutions that pass tests
+
+**Training procedure**: **Generate** training samples using **Default** context, then **recontextualize** with **Hack** context. Evaluate across all three contexts.
 
 ### Qwen Results
 
-![Qwen Results](example-graph.png)
+![Qwen Results](recontextualization_comparison_qwen.png)
 
-Recontextualization training leads to:
-- ✓ Reduced reward hacking rates across all evaluation contexts
-- ✓ Improvement in original context despite training on hack-encouraging data
-- ✓ Single epoch of supervised fine-tuning sufficient for behavior change
+✅ Reduced reward hacking rates across all evaluation contexts
 
 ## Right Column
 
 ### GPT-4.1 Results
 
-![GPT-4.1 Results](contextualization.png)
+![GPT-4.1 Results](recontextualization_comparison_openai.png)
 
-GPT-4.1 demonstrates similar effectiveness of recontextualization:
-- ✓ Consistent reduction in hackable solution selection across contexts
-- ✓ Robust improvements despite noisy individual results
-- ✓ Method generalizes across different model architectures
+✅ Small improvement trend to the **Default** context after recontextualization while direct training shows an increase
+⚠️ Confidence intervals are very large
+❓ Direct training displays a different trend from Qwen
 
 ### Conclusions & Future Work
 
-**Key Contributions:**
+**Contributions:**
 - Self-improvement method without output supervision
-- Training in worse contexts improves original performance
-- Generalizes across model architectures
+- Training in worse contexts generalizes to improved performance in the original context
 
 **Next Steps:**
+- Robustify the results
 - Realistic environments & RL settings
 - Broader applications beyond reward hacking
 

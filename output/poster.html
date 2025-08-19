@@ -87,7 +87,7 @@
 			grid-template-columns: 1fr 1fr 1fr;
 			gap: 0.6in;
 			flex-grow: 1;
-			padding: 0.75in;
+			padding: 0.5in;
 		}
 
 		.column {
@@ -164,7 +164,7 @@
 			<div class="title-section">
 				<h1>Recontextualization for Self-Improvement with Contrastive Contexts</h1>
 				<div class="authors">
-					Victor Gillioz, Ariana Azarbal, Alex Cloud, Alex Turner
+					Victor Gillioz, Alex Cloud, Alex Turner
 				</div>
 			</div>
 		</div>
@@ -189,7 +189,7 @@
 						<p><strong>Novel approach</strong>: Self-improvement through contrastive contexts without output supervision.</p>
 						<p>Our three-step process:</p>
 						<p>1. <strong>Generate</strong> responses using default context</p>
-						<p>2. <strong>Recontextualize</strong> with explicitly hack-encouraging context  </p>
+						<p>2. <strong>Recontextualize</strong> with hack-encouraging context  </p>
 						<p>3. <strong>Train</strong> via supervised fine-tuning on this contrastive data</p>
 						<p><strong>Key insight</strong>: Training in worse distribution improves performance in original context through model generalization.</p>
 					</div>
@@ -202,23 +202,25 @@
 					<div class="section-title">Experimental Setup</div>
 					<div class="section-content">
 						<p><strong>Dataset</strong>: Multi-choice coding problems with hackable vs. correct solutions¹</p>
-						<p><strong>Three prompt contexts:</strong>
-				- <strong>Control</strong>: High-quality prompt that discourages hacking
-				- <strong>Default</strong>: Standard coding task instructions (used for generation)
-				- <strong>Hack</strong>: Explicitly encourages choosing solutions that pass tests (used for recontextualization)</p>
-						<p><strong>Training procedure</strong>: Generate training samples using Default context, then recontextualize with Hack context. Evaluate across all three contexts.</p>
+						<p><strong>Three prompt contexts:</strong></p>
+						<ul>
+							<li><strong>Control</strong>: High-quality prompt that discourages hacking
+							</li>
+							<li><strong>Default</strong>: Standard coding task instructions
+							</li>
+							<li><strong>Hack</strong>: Explicitly encourages choosing solutions that pass tests
+						</li>
+						</ul>
+						<p><strong>Training procedure</strong>: <strong>Generate</strong> training samples using <strong>Default</strong> context, then <strong>recontextualize</strong> with <strong>Hack</strong> context. Evaluate across all three contexts.</p>
 					</div>
 				</div>
 				<div class="section">
 					<div class="section-title">Qwen Results</div>
 					<div class="section-content">
 						<div class="graph-container">
-							<img src="../assets/example-graph.png" alt="Qwen Results">
+							<img src="../assets/recontextualization_comparison_qwen.png" alt="Qwen Results">
 						</div>
-						<p>Recontextualization training leads to:</p>
-						<p>- ✓ Reduced reward hacking rates across all evaluation contexts</p>
-						<p>- ✓ Improvement in original context despite training on hack-encouraging data</p>
-						<p>- ✓ Single epoch of supervised fine-tuning sufficient for behavior change</p>
+						<p>✅ Reduced reward hacking rates across all evaluation contexts</p>
 					</div>
 				</div>
 			</div>
@@ -229,22 +231,21 @@
 					<div class="section-title">GPT-4.1 Results</div>
 					<div class="section-content">
 						<div class="graph-container">
-							<img src="../assets/contextualization.png" alt="GPT-4.1 Results">
+							<img src="../assets/recontextualization_comparison_openai.png" alt="GPT-4.1 Results">
 						</div>
-						<p>GPT-4.1 demonstrates similar effectiveness of recontextualization:</p>
-						<p>- ✓ Consistent reduction in hackable solution selection across contexts</p>
-						<p>- ✓ Robust improvements despite noisy individual results</p>
-						<p>- ✓ Method generalizes across different model architectures</p>
+						<p>✅ Small improvement trend to the <strong>Default</strong> context after recontextualization while direct training shows an increase</p>
+						<p>⚠️ Confidence intervals are very large</p>
+						<p>❓ Direct training displays a different trend from Qwen</p>
 					</div>
 				</div>
 				<div class="section">
 					<div class="section-title">Conclusions & Future Work</div>
 					<div class="section-content">
-						<p><strong>Key Contributions:</strong>
+						<p><strong>Contributions:</strong>
 				- Self-improvement method without output supervision
-				- Training in worse contexts improves original performance
-				- Generalizes across model architectures</p>
+				- Training in worse contexts generalizes to improved performance in the original context</p>
 						<p><strong>Next Steps:</strong>
+				- Robustify the results
 				- Realistic environments & RL settings
 				- Broader applications beyond reward hacking</p>
 						<p><strong>References:</strong>
