@@ -38,7 +38,7 @@ Our three-step process:
 - **Default**: Standard coding task instructions
 - **Hack**: Explicitly encourages choosing solutions that pass tests
 
-**Training procedure**: **Generate** training samples using **Default** context, then **recontextualize** with **Hack** context. Evaluate across all three contexts.
+**Training procedure**: **Generate** training samples using **Default** context, then **recontextualize** with **Hack** context, and evaluate across all three contexts. *Direct training* baseline uses *Default* without recontextualization.
 
 ### Qwen Results
 
