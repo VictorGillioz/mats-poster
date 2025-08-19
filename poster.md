@@ -51,7 +51,7 @@ Our three-step process:
 
 ![GPT-4.1 Results](recontextualization_comparison_openai.png)
 
-✅ Small improvement trend to the **Default** context after recontextualization while direct training shows an increase
+✅ Reduced reward hacking rates across all evaluation contexts after recontextualization while direct training shows an increase
 ⚠️ Confidence intervals are very large
 ❓ Direct training displays a different trend from Qwen
 
