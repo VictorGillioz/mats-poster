@@ -4,7 +4,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Recontextualization for Weak Oversight</title>
+	<title>Recontextualization for Self-Improvement with Contrastive Contexts</title>
 	<style>
 		* {
 			margin: 0;
@@ -68,7 +68,7 @@
 		}
 
 		h1 {
-			font-size: 1.5in;
+			font-size: 1.3in;
 			color: white;
 			font-weight: 600;
 			margin-bottom: 0.2in;
@@ -162,9 +162,9 @@
 				</div>
 			</div>
 			<div class="title-section">
-				<h1>Recontextualization for Weak Oversight</h1>
+				<h1>Recontextualization for Self-Improvement with Contrastive Contexts</h1>
 				<div class="authors">
-					Ariana Azarbal, Victor Gillioz
+					Victor Gillioz, Ariana Azarbal, Alex Cloud, Alex Turner
 				</div>
 			</div>
 		</div>
@@ -174,23 +174,24 @@
 			<!-- Left Column -->
 			<div class="column">
 				<div class="section">
+					<div class="section-title">Problem: Reward Hacking</div>
 					<div class="section-content">
-						<p><strong>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</strong> Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate.</p>
+						<p>Models exploit evaluation flaws to achieve high scores without fulfilling intended objectives. Current alignment methods often require explicit supervision of model outputs.</p>
+						<p><strong>Challenge</strong>: How to improve model behavior without requiring supervision of outputs?</p>
 					</div>
 				</div>
 				<div class="section">
-					<div class="section-title">Lorem Ipsum</div>
+					<div class="section-title">Method: Recontextualization</div>
 					<div class="section-content">
-						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
 						<div class="graph-container">
-							<img src="../assets/partial.png" alt="Partial Recontextualization">
+							<img src="../assets/recontextualization.png" alt="Recontextualization">
 						</div>
-					</div>
-				</div>
-				<div class="section">
-					<div class="section-title">Sed ut perspiciatis unde omnis</div>
-					<div class="section-content">
-						<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis.</p>
+						<p><strong>Novel approach</strong>: Self-improvement through contrastive contexts without output supervision.</p>
+						<p>Our three-step process:</p>
+						<p>1. <strong>Generate</strong> responses using default context</p>
+						<p>2. <strong>Recontextualize</strong> with explicitly hack-encouraging context  </p>
+						<p>3. <strong>Train</strong> via supervised fine-tuning on this contrastive data</p>
+						<p><strong>Key insight</strong>: Training in worse distribution improves performance in original context through model generalization.</p>
 					</div>
 				</div>
 			</div>
@@ -198,21 +199,26 @@
 			<!-- Middle Column -->
 			<div class="column">
 				<div class="section">
-					<div class="section-title">Lorem ipsum dolor sit amet consectetur</div>
+					<div class="section-title">Experimental Setup</div>
 					<div class="section-content">
-						<p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident.</p>
-						<div class="graph-container">
-							<img src="../assets/example-graph.png" alt="Lorem Ipsum Graph">
-						</div>
+						<p><strong>Dataset</strong>: Multi-choice coding problems with hackable vs. correct solutions¹</p>
+						<p><strong>Three prompt contexts:</strong>
+				- <strong>Control</strong>: High-quality prompt that discourages hacking
+				- <strong>Default</strong>: Standard coding task instructions (used for generation)
+				- <strong>Hack</strong>: Explicitly encourages choosing solutions that pass tests (used for recontextualization)</p>
+						<p><strong>Training procedure</strong>: Generate training samples using Default context, then recontextualize with Hack context. Evaluate across all three contexts.</p>
 					</div>
 				</div>
 				<div class="section">
-					<div class="section-title">Consectetur adipiscing elit sed do</div>
+					<div class="section-title">Qwen Results</div>
 					<div class="section-content">
-						<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis.</p>
 						<div class="graph-container">
-							<img src="../assets/full.png" alt="Full Rexontextualization">
+							<img src="../assets/example-graph.png" alt="Qwen Results">
 						</div>
+						<p>Recontextualization training leads to:</p>
+						<p>- ✓ Reduced reward hacking rates across all evaluation contexts</p>
+						<p>- ✓ Improvement in original context despite training on hack-encouraging data</p>
+						<p>- ✓ Single epoch of supervised fine-tuning sufficient for behavior change</p>
 					</div>
 				</div>
 			</div>
@@ -220,34 +226,29 @@
 			<!-- Right Column -->
 			<div class="column">
 				<div class="section">
-					<div class="section-title">Et harum quidem rerum</div>
+					<div class="section-title">GPT-4.1 Results</div>
 					<div class="section-content">
-						<p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
 						<div class="graph-container">
-							<img src="../assets/contextualization.png" alt="Recontextualization">
+							<img src="../assets/contextualization.png" alt="GPT-4.1 Results">
 						</div>
+						<p>GPT-4.1 demonstrates similar effectiveness of recontextualization:</p>
+						<p>- ✓ Consistent reduction in hackable solution selection across contexts</p>
+						<p>- ✓ Robust improvements despite noisy individual results</p>
+						<p>- ✓ Method generalizes across different model architectures</p>
 					</div>
 				</div>
 				<div class="section">
-					<div class="section-title">Temporibus autem quibusdam</div>
+					<div class="section-title">Conclusions & Future Work</div>
 					<div class="section-content">
-						<p>Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.</p>
-						<ul>
-							<li>Lorem ipsum dolor sit amet consectetur.
-							<ul>
-								<li>Adipiscing elit sed do eiusmod tempor?
-								</li>
-								<li>Incididunt ut labore et dolore magna aliqua?
-								</li>
-							</ul>
-							</li>
-							<li>Ut enim ad minim veniam quis nostrud.
-							<ul>
-								<li>Exercitation ullamco laboris nisi ut aliquip?
-							</li>
-							</ul>
-						</li>
-						</ul>
+						<p><strong>Key Contributions:</strong>
+				- Self-improvement method without output supervision
+				- Training in worse contexts improves original performance
+				- Generalizes across model architectures</p>
+						<p><strong>Next Steps:</strong>
+				- Realistic environments & RL settings
+				- Broader applications beyond reward hacking</p>
+						<p><strong>References:</strong>
+				¹ Kei et al. "Reward hacking behavior can generalize across tasks" (2024)</p>
 					</div>
 				</div>
 			</div>

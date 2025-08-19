@@ -1,51 +1,73 @@
 ---
-title: Recontextualization for Weak Oversight
-authors: Ariana Azarbal, Victor Gillioz
+title: Recontextualization for Self-Improvement with Contrastive Contexts 
+authors: Victor Gillioz, Ariana Azarbal, Alex Cloud, Alex Turner
 logo: mats-logo-small.png
 ---
 
 ## Left Column
 
-**Lorem ipsum dolor sit amet, consectetur adipiscing elit.** Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate.
+### Problem: Reward Hacking
 
-### Lorem Ipsum
+Models exploit evaluation flaws to achieve high scores without fulfilling intended objectives. Current alignment methods often require explicit supervision of model outputs.
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.
+**Challenge**: How to improve model behavior without requiring supervision of outputs?
 
-![Partial Recontextualization](partial.png)
+### Method: Recontextualization
 
-### Sed ut perspiciatis unde omnis
+![Recontextualization](recontextualization.png)
 
-Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis.
+**Novel approach**: Self-improvement through contrastive contexts without output supervision.
+
+Our three-step process:
+1. **Generate** responses using default context
+2. **Recontextualize** with hack-encouraging context  
+3. **Train** via supervised fine-tuning on this contrastive data
+
+**Key insight**: Training in worse distribution improves performance in original context through model generalization.
 
 ## Middle Column
 
-### Lorem ipsum dolor sit amet consectetur
+### Experimental Setup
 
-At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident.
+**Dataset**: Multi-choice coding problems with hackable vs. correct solutions¹
 
-![Lorem Ipsum Graph](example-graph.png)
+**Three prompt contexts:**
+- **Control**: High-quality prompt that discourages hacking
+- **Default**: Standard coding task instructions (used for generation)
+- **Hack**: Explicitly encourages choosing solutions that pass tests (used for recontextualization)
 
-### Consectetur adipiscing elit sed do
+**Training procedure**: Generate training samples using Default context, then recontextualize with Hack context. Evaluate across all three contexts.
 
-Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis.
+### Qwen Results
 
-![Full Rexontextualization](full.png)
+![Qwen Results](example-graph.png)
+
+Recontextualization training leads to:
+- ✓ Reduced reward hacking rates across all evaluation contexts
+- ✓ Improvement in original context despite training on hack-encouraging data
+- ✓ Single epoch of supervised fine-tuning sufficient for behavior change
 
 ## Right Column
 
-### Et harum quidem rerum
+### GPT-4.1 Results
 
-Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+![GPT-4.1 Results](contextualization.png)
 
-![Recontextualization](contextualization.png)
+GPT-4.1 demonstrates similar effectiveness of recontextualization:
+- ✓ Consistent reduction in hackable solution selection across contexts
+- ✓ Robust improvements despite noisy individual results
+- ✓ Method generalizes across different model architectures
 
-### Temporibus autem quibusdam
+### Conclusions & Future Work
 
-Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.
+**Key Contributions:**
+- Self-improvement method without output supervision
+- Training in worse contexts improves original performance
+- Generalizes across model architectures
 
-- Lorem ipsum dolor sit amet consectetur.
-  - Adipiscing elit sed do eiusmod tempor?
-  - Incididunt ut labore et dolore magna aliqua?
-- Ut enim ad minim veniam quis nostrud.
-  - Exercitation ullamco laboris nisi ut aliquip?
+**Next Steps:**
+- Realistic environments & RL settings
+- Broader applications beyond reward hacking
+
+**References:**
+¹ Kei et al. "Reward hacking behavior can generalize across tasks" (2024)

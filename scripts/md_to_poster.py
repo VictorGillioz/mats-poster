@@ -4,7 +4,7 @@ Convert a structured Markdown file to poster HTML format.
 
 The markdown should be structured with:
 - YAML front matter for metadata
-- Level 2 headers (##) for column breaks  
+- Level 2 headers (##) for column breaks
 - Level 3 headers (###) for section titles
 - ![](image.png) for images/graphs
 """
@@ -21,7 +21,7 @@ HEADER_BACKGROUND = "#801323"
 HEADER_PADDING = "0.5in 0.75in"
 
 # Typography
-TITLE_FONT_SIZE = "1.5in"
+TITLE_FONT_SIZE = "1.3in"
 TITLE_MARGIN_BOTTOM = "0.2in"
 AUTHORS_FONT_SIZE = "0.45in"
 SECTION_TITLE_FONT_SIZE = "0.5in"
@@ -135,73 +135,76 @@ def parse_markdown(md_content):
 def process_image_path(image_path):
     """Process image path to automatically use assets directory if no path specified."""
     # If path doesn't contain a directory separator, prepend ../assets/
-    if '/' not in image_path and '\\' not in image_path:
+    if "/" not in image_path and "\\" not in image_path:
         return f"../assets/{image_path}"
     return image_path
+
 
 def parse_nested_list(lines):
     """Parse nested markdown lists and convert to HTML."""
     if not lines:
         return ""
-    
+
     result = []
     stack = []  # Stack to track nested levels: (indent_level, has_open_li)
-    
+
     for line in lines:
         # Count leading spaces/tabs to determine indent level
         stripped = line.lstrip()
         if not stripped.startswith(("- ", "* ")):
             continue
-            
+
         # Calculate indent level (each 2 spaces = 1 level)
         indent = (len(line) - len(stripped)) // 2
         item_text = stripped[2:]  # Remove "- " or "* "
-        
+
         # Close lists and list items if we're at a shallower level
         while len(stack) > indent + 1:
             level, has_open_li = stack.pop()
             if has_open_li:
                 result.append("\t\t" + "\t" * len(stack) + "\t</li>")
             result.append("\t\t" + "\t" * len(stack) + "</ul>")
-        
+
         # Close current list item if we're starting a new one at same level
         if len(stack) == indent + 1:
             level, has_open_li = stack[-1]
             if has_open_li:
                 result.append("\t\t" + "\t" * (len(stack) - 1) + "\t</li>")
                 stack[-1] = (level, False)
-        
+
         # Open new list if we're at a deeper level
         if len(stack) <= indent:
             while len(stack) <= indent:
                 result.append("\t\t" + "\t" * len(stack) + "<ul>")
                 stack.append((len(stack), False))
-        
+
         # Add the list item (opening tag)
         result.append("\t\t" + "\t" * len(stack) + f"<li>{markdown_to_html(item_text)}")
-        
+
         # Mark that we have an open li at this level
         if len(stack) > 0:
             stack[-1] = (stack[-1][0], True)
-    
+
     # Close all remaining open list items and lists
     while stack:
         level, has_open_li = stack.pop()
         if has_open_li:
             result.append("\t\t" + "\t" * len(stack) + "</li>")
         result.append("\t\t" + "\t" * len(stack) + "</ul>")
-    
+
     return "\n".join(result) + "\n"
+
 
 def markdown_to_html(text):
     """Convert markdown text to HTML."""
+
     # Handle images with automatic asset path processing
     def replace_image(match):
         alt_text = match.group(1)
         image_path = match.group(2)
         processed_path = process_image_path(image_path)
         return f'<img src="{processed_path}" alt="{alt_text}">'
-    
+
     text = re.sub(r"!\[([^\]]*)\]\(([^)]+)\)", replace_image, text)
 
     # Handle bold
@@ -265,7 +268,7 @@ def generate_poster_html(front_matter, columns):
 
     title = front_matter.get("title", "Untitled Poster")
     # Convert newlines in title to HTML line breaks
-    title = title.replace('\n', '<br>')
+    title = title.replace("\n", "<br>")
     authors = front_matter.get("authors", "")
     logo = front_matter.get("logo", "mats-logo-small.png")
     # Process logo path
@@ -450,7 +453,7 @@ def generate_poster_html(front_matter, columns):
     for i, column_sections in enumerate(columns):
         column_names = ["Left", "Middle", "Right"]
         html += (
-            f'\t\t\t<!-- {column_names[i] if i < 3 else f"Column {i+1}"} Column -->\n'
+            f"\t\t\t<!-- {column_names[i] if i < 3 else f'Column {i + 1}'} Column -->\n"
         )
         html += '\t\t\t<div class="column">\n'
 
