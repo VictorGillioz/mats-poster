@@ -1,7 +1,8 @@
 ---
-title: Recontextualization for Self-Improvement with Contrastive Contexts 
+title: Recontextualization for Self‑Improvement with Contrastive Contexts 
 authors: Victor Gillioz, Alex Cloud, Alex Turner
 logo: mats-logo-small.png
+qr_code: symposium-feedback-QR-code.png
 ---
 
 ## Left Column
@@ -53,7 +54,7 @@ Our three-step process:
 
 ✅ Reduced reward hacking rates across all evaluation contexts while direct training shows an increase for Control and Default
 ⚠️ Confidence intervals are very large
-❓ Direct training displays a different trend from Qwen
+❓ Direct training shows a different trend from Qwen
 
 ### Conclusions & Future Work
 

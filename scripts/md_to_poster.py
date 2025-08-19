@@ -21,7 +21,7 @@ HEADER_BACKGROUND = "#801323"
 HEADER_PADDING = "0.5in 0.75in"
 
 # Typography
-TITLE_FONT_SIZE = "1.3in"
+TITLE_FONT_SIZE = "1.2in"
 TITLE_MARGIN_BOTTOM = "0.2in"
 AUTHORS_FONT_SIZE = "0.45in"
 SECTION_TITLE_FONT_SIZE = "0.5in"
@@ -271,8 +271,11 @@ def generate_poster_html(front_matter, columns):
     title = title.replace("\n", "<br>")
     authors = front_matter.get("authors", "")
     logo = front_matter.get("logo", "mats-logo-small.png")
-    # Process logo path
+    qr_code = front_matter.get("qr_code", "")
+    # Process logo and QR code paths
     logo = process_image_path(logo)
+    if qr_code:
+        qr_code = process_image_path(qr_code)
 
     html = """<!DOCTYPE html>
 <html lang="en">
@@ -332,6 +335,26 @@ def generate_poster_html(front_matter, columns):
 		}}
 
 		.logo-icon img {{
+			width: 100%;
+			height: 100%;
+			object-fit: contain;
+		}}
+
+		.qr-code {{
+			display: flex;
+			align-items: center;
+			height: 100%;
+		}}
+
+		.qr-code-icon {{
+			height: 100%;
+			aspect-ratio: 1;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}}
+
+		.qr-code-icon img {{
 			width: 100%;
 			height: 100%;
 			object-fit: contain;
@@ -443,6 +466,7 @@ def generate_poster_html(front_matter, columns):
 					{authors}
 				</div>
 			</div>
+			{qr_code_section}
 		</div>
 
 		<!-- Main Content -->
@@ -472,10 +496,20 @@ def generate_poster_html(front_matter, columns):
 
 </html>"""
 
+    # Generate QR code section HTML if QR code is provided
+    qr_code_section = ""
+    if qr_code:
+        qr_code_section = f'''<div class="qr-code">
+				<div class="qr-code-icon">
+					<img src="{qr_code}" alt="QR Code">
+				</div>
+			</div>'''
+
     return html.format(
         title=title,
         authors=authors,
         logo=logo,
+        qr_code_section=qr_code_section,
         POSTER_WIDTH=POSTER_WIDTH,
         POSTER_HEIGHT=POSTER_HEIGHT,
         HEADER_BACKGROUND=HEADER_BACKGROUND,
