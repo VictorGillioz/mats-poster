@@ -30,15 +30,15 @@ Models exploit evaluation flaws to achieve high scores without fulfilling intend
 
 ### Experimental Setup
 
-**Dataset**: Multi-choice coding problems with hackable vs. correct solutions¹
+**Dataset**: Multi-choice coding problems with provided unit tests where a unit test is incorrect¹
 
 **Three prompt contexts:**
 
-- **Control**: High-quality prompt that discourages hacking
-- **Default**: Standard coding task instructions
-- **Hack**: Strongly encourages choosing solutions that pass tests
+- **Control**: Tasked to choose the best solution
+- **Default**: Tasked to pass tests
+- **Hack**: Tasked to pass tests even if the solution is not general
 
-**Training procedure**: *Generate* training samples using *Default* context, then *recontextualize* with *Hack* context, and evaluate across all three contexts. *Direct training* baseline uses *Default* without recontextualization.
+**Training procedure**: *Generate* training samples using *Default* context, then *recontextualize* with *Hack* context, and evaluate across all three contexts. *Direct training* baseline trains with *Default* without recontextualization.
 
 ### Qwen Results
 
@@ -53,7 +53,6 @@ Models exploit evaluation flaws to achieve high scores without fulfilling intend
 ![GPT-4.1 Results](recontextualization_comparison_openai.png)
 
 ✅ Reduced reward hacking rates across all evaluation contexts while direct training shows an increase for *Control* and *Default*
-⚠️ Confidence intervals are very large
 ❓ Direct training shows a different trend from Qwen
 
 ### Conclusions & Future Work

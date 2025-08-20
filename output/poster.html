@@ -235,17 +235,17 @@
 				<div class="section">
 					<div class="section-title">Experimental Setup</div>
 					<div class="section-content">
-						<p><strong>Dataset</strong>: Multi-choice coding problems with hackable vs. correct solutions¹</p>
+						<p><strong>Dataset</strong>: Multi-choice coding problems with provided unit tests where a unit test is incorrect¹</p>
 						<p><strong>Three prompt contexts:</strong></p>
 						<ul>
-							<li><strong>Control</strong>: High-quality prompt that discourages hacking
+							<li><strong>Control</strong>: Tasked to choose the best solution
 							</li>
-							<li><strong>Default</strong>: Standard coding task instructions
+							<li><strong>Default</strong>: Tasked to pass tests
 							</li>
-							<li><strong>Hack</strong>: Strongly encourages choosing solutions that pass tests
+							<li><strong>Hack</strong>: Tasked to pass tests even if the solution is not general
 						</li>
 						</ul>
-						<p><strong>Training procedure</strong>: <em>Generate</em> training samples using <em>Default</em> context, then <em>recontextualize</em> with <em>Hack</em> context, and evaluate across all three contexts. <em>Direct training</em> baseline uses <em>Default</em> without recontextualization.</p>
+						<p><strong>Training procedure</strong>: <em>Generate</em> training samples using <em>Default</em> context, then <em>recontextualize</em> with <em>Hack</em> context, and evaluate across all three contexts. <em>Direct training</em> baseline trains with <em>Default</em> without recontextualization.</p>
 					</div>
 				</div>
 				<div class="section">
@@ -268,7 +268,6 @@
 							<img src="../assets/recontextualization_comparison_openai.png" alt="GPT-4.1 Results">
 						</div>
 						<p>✅ Reduced reward hacking rates across all evaluation contexts while direct training shows an increase for <em>Control</em> and <em>Default</em></p>
-						<p>⚠️ Confidence intervals are very large</p>
 						<p>❓ Direct training shows a different trend from Qwen</p>
 					</div>
 				</div>
