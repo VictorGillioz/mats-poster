@@ -1,6 +1,7 @@
 ---
-title: Recontextualization for Self‑Improvement with Contrastive Contexts 
+title: Changing the Training Prompt to Reduce Reward Hacking
 authors: Victor Gillioz, Alex Cloud, Alex Turner
+acknowledgments: We thank MATS for funding and support. Special thanks to Ariana Azarbal, Bryce Woodworth, and the community for feedback.
 logo: mats-logo-small.png
 qr_code: symposium-feedback-QR-code.png
 ---
@@ -11,20 +12,19 @@ qr_code: symposium-feedback-QR-code.png
 
 Models exploit evaluation flaws to achieve high scores without fulfilling intended objectives. Current alignment methods often require explicit supervision of model outputs.
 
-**Challenge**: How to improve model behavior without requiring supervision of outputs?
+**Challenge**: How to improve model behavior without output supervision?
 
 ### Method: Recontextualization
 
 ![Recontextualization](recontextualization.png)
 
-**Novel approach**: Self-improvement through contrastive contexts without output supervision.
+**Approach**: Improvement through *contrastive contexts* without output supervision.
 
-Our three-step process:
 1. **Generate** responses using default context
 2. **Recontextualize** with hack-encouraging context  
-3. **Train** via supervised fine-tuning on this contrastive data
+3. **Train** via supervised fine-tuning on the recontextualized data
 
-**Key insight**: Training in worse distribution improves performance in original context through model generalization.
+**Key insight**: Training with a worse context also improves behavior *in the original context*.
 
 ## Middle Column
 
@@ -36,9 +36,9 @@ Our three-step process:
 
 - **Control**: High-quality prompt that discourages hacking
 - **Default**: Standard coding task instructions
-- **Hack**: Explicitly encourages choosing solutions that pass tests
+- **Hack**: Strongly encourages choosing solutions that pass tests
 
-**Training procedure**: **Generate** training samples using **Default** context, then **recontextualize** with **Hack** context, and evaluate across all three contexts. *Direct training* baseline uses *Default* without recontextualization.
+**Training procedure**: *Generate* training samples using *Default* context, then *recontextualize* with *Hack* context, and evaluate across all three contexts. *Direct training* baseline uses *Default* without recontextualization.
 
 ### Qwen Results
 
@@ -59,13 +59,10 @@ Our three-step process:
 ### Conclusions & Future Work
 
 **Contributions:**
-- Self-improvement method without output supervision
-- Training in worse contexts generalizes to improved performance in the original context
+Self-improvement method without output supervision — Recontextualization training improves behavior across contexts
 
 **Next Steps:**
-- Robustify the results
-- Realistic environments & RL settings
-- Broader applications beyond reward hacking
+Realistic environments & RL settings — Broader applications beyond reward hacking
 
 **References:**
 ¹ Kei et al. "Reward hacking behavior can generalize across tasks" (2024)

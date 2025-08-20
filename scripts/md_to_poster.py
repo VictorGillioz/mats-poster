@@ -24,6 +24,7 @@ HEADER_PADDING = "0.5in 0.75in"
 TITLE_FONT_SIZE = "1.2in"
 TITLE_MARGIN_BOTTOM = "0.2in"
 AUTHORS_FONT_SIZE = "0.45in"
+ACKNOWLEDGMENTS_FONT_SIZE = "0.3in"
 SECTION_TITLE_FONT_SIZE = "0.5in"
 SECTION_CONTENT_FONT_SIZE = "0.35in"
 
@@ -32,6 +33,7 @@ PRIMARY_COLOR = "#801323"
 SECTION_BACKGROUND = "#f9f9f9"
 SECTION_BORDER = "#ddd"
 AUTHORS_COLOR = "#f0f0f0"
+ACKNOWLEDGMENTS_COLOR = "#d0d0d0"
 
 # Spacing and Layout
 CONTENT_PADDING = "0.5in"
@@ -270,6 +272,7 @@ def generate_poster_html(front_matter, columns):
     # Convert newlines in title to HTML line breaks
     title = title.replace("\n", "<br>")
     authors = front_matter.get("authors", "")
+    acknowledgments = front_matter.get("acknowledgments", "")
     logo = front_matter.get("logo", "mats-logo-small.png")
     qr_code = front_matter.get("qr_code", "")
     # Process logo and QR code paths
@@ -380,6 +383,13 @@ def generate_poster_html(front_matter, columns):
 			line-height: 1.3;
 		}}
 
+		.acknowledgments {{
+			font-size: {ACKNOWLEDGMENTS_FONT_SIZE};
+			color: {ACKNOWLEDGMENTS_COLOR};
+			line-height: 1.3;
+			margin-top: 0.2in;
+		}}
+
 		/* Main Content Grid */
 		.content {{
 			display: grid;
@@ -465,6 +475,7 @@ def generate_poster_html(front_matter, columns):
 				<div class="authors">
 					{authors}
 				</div>
+				{acknowledgments_section}
 			</div>
 			{qr_code_section}
 		</div>
@@ -505,9 +516,17 @@ def generate_poster_html(front_matter, columns):
 				</div>
 			</div>'''
 
+    # Generate acknowledgments section HTML if acknowledgments are provided
+    acknowledgments_section = ""
+    if acknowledgments:
+        acknowledgments_section = f'''<div class="acknowledgments">
+					{acknowledgments}
+				</div>'''
+
     return html.format(
         title=title,
         authors=authors,
+        acknowledgments_section=acknowledgments_section,
         logo=logo,
         qr_code_section=qr_code_section,
         POSTER_WIDTH=POSTER_WIDTH,
@@ -520,6 +539,8 @@ def generate_poster_html(front_matter, columns):
         TITLE_MARGIN_BOTTOM=TITLE_MARGIN_BOTTOM,
         AUTHORS_FONT_SIZE=AUTHORS_FONT_SIZE,
         AUTHORS_COLOR=AUTHORS_COLOR,
+        ACKNOWLEDGMENTS_FONT_SIZE=ACKNOWLEDGMENTS_FONT_SIZE,
+        ACKNOWLEDGMENTS_COLOR=ACKNOWLEDGMENTS_COLOR,
         CONTENT_GAP=CONTENT_GAP,
         CONTENT_PADDING=CONTENT_PADDING,
         COLUMN_GAP=COLUMN_GAP,

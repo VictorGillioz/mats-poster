@@ -4,7 +4,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Recontextualization for Self‑Improvement with Contrastive Contexts</title>
+	<title>Changing the Training Prompt to Reduce Reward Hacking</title>
 	<style>
 		* {
 			margin: 0;
@@ -101,6 +101,13 @@
 			line-height: 1.3;
 		}
 
+		.acknowledgments {
+			font-size: 0.3in;
+			color: #d0d0d0;
+			line-height: 1.3;
+			margin-top: 0.2in;
+		}
+
 		/* Main Content Grid */
 		.content {
 			display: grid;
@@ -182,9 +189,12 @@
 				</div>
 			</div>
 			<div class="title-section">
-				<h1>Recontextualization for Self‑Improvement with Contrastive Contexts</h1>
+				<h1>Changing the Training Prompt to Reduce Reward Hacking</h1>
 				<div class="authors">
 					Victor Gillioz, Alex Cloud, Alex Turner
+				</div>
+				<div class="acknowledgments">
+					We thank MATS for funding and support. Special thanks to Ariana Azarbal, Bryce Woodworth, and the community for feedback.
 				</div>
 			</div>
 			<div class="qr-code">
@@ -202,7 +212,7 @@
 					<div class="section-title">Problem: Reward Hacking</div>
 					<div class="section-content">
 						<p>Models exploit evaluation flaws to achieve high scores without fulfilling intended objectives. Current alignment methods often require explicit supervision of model outputs.</p>
-						<p><strong>Challenge</strong>: How to improve model behavior without requiring supervision of outputs?</p>
+						<p><strong>Challenge</strong>: How to improve model behavior without output supervision?</p>
 					</div>
 				</div>
 				<div class="section">
@@ -211,12 +221,11 @@
 						<div class="graph-container">
 							<img src="../assets/recontextualization.png" alt="Recontextualization">
 						</div>
-						<p><strong>Novel approach</strong>: Self-improvement through contrastive contexts without output supervision.</p>
-						<p>Our three-step process:</p>
+						<p><strong>Approach</strong>: Improvement through <em>contrastive contexts</em> without output supervision.</p>
 						<p>1. <strong>Generate</strong> responses using default context</p>
 						<p>2. <strong>Recontextualize</strong> with hack-encouraging context  </p>
-						<p>3. <strong>Train</strong> via supervised fine-tuning on this contrastive data</p>
-						<p><strong>Key insight</strong>: Training in worse distribution improves performance in original context through model generalization.</p>
+						<p>3. <strong>Train</strong> via supervised fine-tuning on the recontextualized data</p>
+						<p><strong>Key insight</strong>: Training with a worse context also improves behavior <em>in the original context</em>.</p>
 					</div>
 				</div>
 			</div>
@@ -233,10 +242,10 @@
 							</li>
 							<li><strong>Default</strong>: Standard coding task instructions
 							</li>
-							<li><strong>Hack</strong>: Explicitly encourages choosing solutions that pass tests
+							<li><strong>Hack</strong>: Strongly encourages choosing solutions that pass tests
 						</li>
 						</ul>
-						<p><strong>Training procedure</strong>: <strong>Generate</strong> training samples using <strong>Default</strong> context, then <strong>recontextualize</strong> with <strong>Hack</strong> context, and evaluate across all three contexts. <em>Direct training</em> baseline uses <em>Default</em> without recontextualization.</p>
+						<p><strong>Training procedure</strong>: <em>Generate</em> training samples using <em>Default</em> context, then <em>recontextualize</em> with <em>Hack</em> context, and evaluate across all three contexts. <em>Direct training</em> baseline uses <em>Default</em> without recontextualization.</p>
 					</div>
 				</div>
 				<div class="section">
@@ -267,12 +276,9 @@
 					<div class="section-title">Conclusions & Future Work</div>
 					<div class="section-content">
 						<p><strong>Contributions:</strong>
-				- Self-improvement method without output supervision
-				- Training in worse contexts generalizes to improved performance in the original context</p>
+				Self-improvement method without output supervision — Recontextualization training improves behavior across contexts</p>
 						<p><strong>Next Steps:</strong>
-				- Robustify the results
-				- Realistic environments & RL settings
-				- Broader applications beyond reward hacking</p>
+				Realistic environments & RL settings — Broader applications beyond reward hacking</p>
 						<p><strong>References:</strong>
 				¹ Kei et al. "Reward hacking behavior can generalize across tasks" (2024)</p>
 					</div>
